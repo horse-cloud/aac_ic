@@ -16,7 +16,7 @@ void app_main(void)
         printf("Hello from app_main!\n");
         sleep(5);
 
-#if 0
+#if 1
         //Stream play
          rt903x_soft_reset();
          rt903x_init();
@@ -25,12 +25,6 @@ void app_main(void)
          //RAM play
          rt903x_soft_reset();
          rt903x_init();
-
-         reg_val1 = 0;
-         I2CReadReg(I2C_ADDRESS, REG_DEV_ID, &reg_val1, 1);
-         ESP_LOGI(TAG, "app_main,REG_DEV_ID:%d",reg_val1);
-         I2CReadReg(I2C_ADDRESS, REG_OSC_CFG1, &reg_val1, 1);
-         ESP_LOGI(TAG, "app_main,reg_val1:%d",reg_val1);
          rt903x_Ram_Play_Demo();
 #endif
     }

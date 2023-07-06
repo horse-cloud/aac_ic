@@ -1,7 +1,7 @@
 # See the build system documentation in IDF programming guide
 # for more information about component CMakeLists.txt files.
 
-file(GLOB_RECURSE DRIVER_SRCS src/*.c)
+file(GLOB_RECURSE DRIVER_SRCS driver/*.c)
 
 idf_component_register(
     SRCS main.c   ${DRIVER_SRCS}      # list the source files of this component
