@@ -1,0 +1,19 @@
+
+
+
+
+main()
+{
+//Stream play
+ rt903x_soft_reset();
+ rt903x_init();
+ rt903x_stream_play_demo();
+
+ //RAM play
+ #if 0
+ rt903x_soft_reset();
+ rt903x_init();
+ rt903x_Ram_Play_Demo();
+ #endif
+ 
+}

@@ -1,0 +1,6 @@
+CMake Error at run_serial_tool.cmake:55 (message):
+  
+  python;;D:/Espressif/frameworks/esp-idf-v5.0.1/components/esptool_py/esptool/esptool.py;--chip;esp32s3
+  failed
+
+
