@@ -1649,6 +1649,21 @@
 			<location>D:/Espressif/frameworks/esp-idf-v5.0.1/components/esp_lcd/src/esp_lcd_panel_st7789.c</location>
 		</link>
 		<link>
+			<name>build/ide/esp_idf_components/Espressif/frameworks/esp-idf-v5.0.1/esp_littlefs/src/esp_littlefs.c</name>
+			<type>1</type>
+			<location>D:/Espressif/frameworks/esp-idf-v5.0.1/components/esp_littlefs/src/esp_littlefs.c</location>
+		</link>
+		<link>
+			<name>build/ide/esp_idf_components/Espressif/frameworks/esp-idf-v5.0.1/esp_littlefs/src/lfs_config.c</name>
+			<type>1</type>
+			<location>D:/Espressif/frameworks/esp-idf-v5.0.1/components/esp_littlefs/src/lfs_config.c</location>
+		</link>
+		<link>
+			<name>build/ide/esp_idf_components/Espressif/frameworks/esp-idf-v5.0.1/esp_littlefs/src/littlefs_api.c</name>
+			<type>1</type>
+			<location>D:/Espressif/frameworks/esp-idf-v5.0.1/components/esp_littlefs/src/littlefs_api.c</location>
+		</link>
+		<link>
 			<name>build/ide/esp_idf_components/Espressif/frameworks/esp-idf-v5.0.1/esp_local_ctrl/proto-c/esp_local_ctrl.pb-c.c</name>
 			<type>1</type>
 			<location>D:/Espressif/frameworks/esp-idf-v5.0.1/components/esp_local_ctrl/proto-c/esp_local_ctrl.pb-c.c</location>
@@ -2397,6 +2412,16 @@
 			<name>build/ide/esp_idf_components/Espressif/frameworks/esp-idf-v5.0.1/esp_hw_support/port/esp32s3/systimer.c</name>
 			<type>1</type>
 			<location>D:/Espressif/frameworks/esp-idf-v5.0.1/components/esp_hw_support/port/esp32s3/systimer.c</location>
+		</link>
+		<link>
+			<name>build/ide/esp_idf_components/Espressif/frameworks/esp-idf-v5.0.1/esp_littlefs/src/littlefs/lfs.c</name>
+			<type>1</type>
+			<location>D:/Espressif/frameworks/esp-idf-v5.0.1/components/esp_littlefs/src/littlefs/lfs.c</location>
+		</link>
+		<link>
+			<name>build/ide/esp_idf_components/Espressif/frameworks/esp-idf-v5.0.1/esp_littlefs/src/littlefs/lfs_util.c</name>
+			<type>1</type>
+			<location>D:/Espressif/frameworks/esp-idf-v5.0.1/components/esp_littlefs/src/littlefs/lfs_util.c</location>
 		</link>
 		<link>
 			<name>build/ide/esp_idf_components/Espressif/frameworks/esp-idf-v5.0.1/esp_netif/lwip/netif/esp_pbuf_ref.c</name>

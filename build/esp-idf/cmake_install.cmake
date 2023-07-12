@@ -299,6 +299,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
+  include("E:/Espressif/workspace/aac_ic/build/esp-idf/esp_littlefs/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
   include("E:/Espressif/workspace/aac_ic/build/esp-idf/protobuf-c/cmake_install.cmake")
 endif()
 

@@ -469,6 +469,13 @@ E:/Espressif/workspace/aac_ic/build/esp-idf/esp_lcd/CMakeFiles/list_install_comp
 E:/Espressif/workspace/aac_ic/build/esp-idf/esp_lcd/CMakeFiles/install.dir
 E:/Espressif/workspace/aac_ic/build/esp-idf/esp_lcd/CMakeFiles/install/local.dir
 E:/Espressif/workspace/aac_ic/build/esp-idf/esp_lcd/CMakeFiles/install/strip.dir
+E:/Espressif/workspace/aac_ic/build/esp-idf/esp_littlefs/CMakeFiles/__idf_esp_littlefs.dir
+E:/Espressif/workspace/aac_ic/build/esp-idf/esp_littlefs/CMakeFiles/edit_cache.dir
+E:/Espressif/workspace/aac_ic/build/esp-idf/esp_littlefs/CMakeFiles/rebuild_cache.dir
+E:/Espressif/workspace/aac_ic/build/esp-idf/esp_littlefs/CMakeFiles/list_install_components.dir
+E:/Espressif/workspace/aac_ic/build/esp-idf/esp_littlefs/CMakeFiles/install.dir
+E:/Espressif/workspace/aac_ic/build/esp-idf/esp_littlefs/CMakeFiles/install/local.dir
+E:/Espressif/workspace/aac_ic/build/esp-idf/esp_littlefs/CMakeFiles/install/strip.dir
 E:/Espressif/workspace/aac_ic/build/esp-idf/protobuf-c/CMakeFiles/__idf_protobuf-c.dir
 E:/Espressif/workspace/aac_ic/build/esp-idf/protobuf-c/CMakeFiles/edit_cache.dir
 E:/Espressif/workspace/aac_ic/build/esp-idf/protobuf-c/CMakeFiles/rebuild_cache.dir

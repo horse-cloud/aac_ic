@@ -45,6 +45,7 @@ $<TARGET_FILE:__idf_esp_http_client>
 $<TARGET_FILE:__idf_esp_http_server>
 $<TARGET_FILE:__idf_esp_https_ota>
 $<TARGET_FILE:__idf_esp_lcd>
+$<TARGET_FILE:__idf_esp_littlefs>
 $<TARGET_FILE:__idf_protobuf-c>
 $<TARGET_FILE:__idf_protocomm>
 $<TARGET_FILE:__idf_esp_local_ctrl>

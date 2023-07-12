@@ -45,6 +45,7 @@ E:/Espressif/workspace/aac_ic/build/esp-idf/esp_http_client/libesp_http_client.a
 E:/Espressif/workspace/aac_ic/build/esp-idf/esp_http_server/libesp_http_server.a
 E:/Espressif/workspace/aac_ic/build/esp-idf/esp_https_ota/libesp_https_ota.a
 E:/Espressif/workspace/aac_ic/build/esp-idf/esp_lcd/libesp_lcd.a
+E:/Espressif/workspace/aac_ic/build/esp-idf/esp_littlefs/libesp_littlefs.a
 E:/Espressif/workspace/aac_ic/build/esp-idf/protobuf-c/libprotobuf-c.a
 E:/Espressif/workspace/aac_ic/build/esp-idf/protocomm/libprotocomm.a
 E:/Espressif/workspace/aac_ic/build/esp-idf/esp_local_ctrl/libesp_local_ctrl.a
