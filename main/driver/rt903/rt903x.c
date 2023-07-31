@@ -93,66 +93,61 @@ wave_des wave_data_list[10]=
 #define MAX_RAM_SIZE            0x600    // 1.5K Bytes
 #define EFS_BYTE_NUM            4
 
-int32_t rt903x_soft_reset()
+int32_t rt903x_soft_reset(rt903_i2c_config_t i2c_config)
 {
     uint8_t reg_val = 0x01;
-    return I2CWriteReg(I2C_ADDRESS, REG_SOFT_RESET, &reg_val, 1);
+    return I2CWriteReg(i2c_config.i2c_master_num,  i2c_config.i2c_address, REG_SOFT_RESET, &reg_val, 1);
 }
 
-int32_t rt903x_install()
-{
-	ESP_ERROR_CHECK(i2c_master_init());
-	ESP_LOGI(TAG, "I2C initialized successfully");
-	return 0;
-}
-int32_t rt903x_init()
+int32_t rt903x_init(rt903_i2c_config_t i2c_config)
 {
     int32_t res = 0;
     uint8_t reg_val;
     struct RAM_PARAM *ram_param;
 
     //check chip id
-    res = I2CReadReg(I2C_ADDRESS, REG_DEV_ID, &reg_val, 1);
+    res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_DEV_ID, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     if(CHIP_ID != reg_val){
-    	ESP_LOGI(TAG, "rt903x_init,got a wrong chipid ,please check i2c read & write interface.get chip id :%x",reg_val); // rt903 is 0x60
+    	ESP_LOGI(TAG, "rt903x_init,got a wrong chipid ,please check i2c read & write interface.get chip id :0x%x",reg_val); // rt903 is 0x60
+        ESP_LOGI(TAG, "i2c_config, i2c_config.i2c_master_num:0x%x,i2c_config.i2c_address:0x%x",i2c_config.i2c_master_num, i2c_config.i2c_address);
     	return -1;
     }
 
-    rt903x_apply_trim();
+    rt903x_apply_trim(i2c_config);
     ram_param = (struct RAM_PARAM*)&rt903x_config.ram_param;
     reg_val = ram_param->ListBaseAddrL;
-    res = I2CWriteReg(I2C_ADDRESS, REG_LIST_BASE_ADDR_L, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_LIST_BASE_ADDR_L, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = ram_param->ListBaseAddrH;
-    res = I2CWriteReg(I2C_ADDRESS, REG_LIST_BASE_ADDR_H, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_LIST_BASE_ADDR_H, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = ram_param->WaveBaseAddrL;
-    res = I2CWriteReg(I2C_ADDRESS, REG_WAVE_BASE_ADDR_L, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_WAVE_BASE_ADDR_L, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = ram_param->WaveBaseAddrH;
-    res = I2CWriteReg(I2C_ADDRESS, REG_WAVE_BASE_ADDR_H, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_WAVE_BASE_ADDR_H, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = ram_param->FifoAEL;
-    res = I2CWriteReg(I2C_ADDRESS, REG_FIFO_AE_L, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_FIFO_AE_L, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = ram_param->FifoAEH;
-    res = I2CWriteReg(I2C_ADDRESS, REG_FIFO_AE_H, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_FIFO_AE_H, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = ram_param->FifoAFL;
-    res = I2CWriteReg(I2C_ADDRESS, REG_FIFO_AF_L, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_FIFO_AF_L, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = ram_param->FifoAFH;
-    res = I2CWriteReg(I2C_ADDRESS, REG_FIFO_AF_H, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_FIFO_AF_H, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x08;
-    res = I2CWriteReg(I2C_ADDRESS, REG_RAM_CFG, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_RAM_CFG, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x2B;
-    res = I2CWriteReg(I2C_ADDRESS, REG_LRA_F0_CFG1, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_LRA_F0_CFG1, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x05;
-    res = I2CWriteReg(I2C_ADDRESS, REG_LRA_F0_CFG2, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_LRA_F0_CFG2, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
 
     ics_delay_ms(1);
@@ -160,53 +155,53 @@ int32_t rt903x_init()
     return 0;
 }
 
-int32_t rt903x_playlist_data(const uint8_t* buf, int32_t size)
+int32_t rt903x_playlist_data(rt903_i2c_config_t i2c_config, const uint8_t* buf, int32_t size)
 {
     int32_t res = 0;
     uint8_t reg_val;
     reg_val = 0x02;
-    res = I2CWriteReg(I2C_ADDRESS, REG_RAM_CFG, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_RAM_CFG, &reg_val, 1);
     struct RAM_PARAM *ram_param;
     ram_param = (struct RAM_PARAM*)&rt903x_config.ram_param;
-    res = I2CWriteReg(I2C_ADDRESS, REG_RAM_ADDR_L, &ram_param->ListBaseAddrL, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_RAM_ADDR_L, &ram_param->ListBaseAddrL, 1);
     CHECK_ERROR_RETURN(res);
-    res = I2CWriteReg(I2C_ADDRESS, REG_RAM_ADDR_H, &ram_param->ListBaseAddrH, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_RAM_ADDR_H, &ram_param->ListBaseAddrH, 1);
     CHECK_ERROR_RETURN(res);
     uint32_t copySize = min(size,MAX_RAM_SIZE);
-    res = I2CWriteReg(I2C_ADDRESS, REG_RAM_DATA, (uint8_t*)buf, copySize);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_RAM_DATA, (uint8_t*)buf, copySize);
     CHECK_ERROR_RETURN(res);
     return 0;
 }
 
-int32_t rt903x_waveform_data(const uint8_t* buf, int32_t size)
+int32_t rt903x_waveform_data(rt903_i2c_config_t i2c_config, const uint8_t* buf, int32_t size)
 {
     int32_t res = 0;
     uint8_t reg_val;
     reg_val = 0x04;
-    res = I2CWriteReg(I2C_ADDRESS, REG_RAM_CFG, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_RAM_CFG, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     struct RAM_PARAM *ram_param;
     ram_param = (struct RAM_PARAM*)&rt903x_config.ram_param;
-    res = I2CWriteReg(I2C_ADDRESS, REG_RAM_ADDR_L, &ram_param->WaveBaseAddrL, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_RAM_ADDR_L, &ram_param->WaveBaseAddrL, 1);
     CHECK_ERROR_RETURN(res);
-    res = I2CWriteReg(I2C_ADDRESS, REG_RAM_ADDR_H, &ram_param->WaveBaseAddrH, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_RAM_ADDR_H, &ram_param->WaveBaseAddrH, 1);
     CHECK_ERROR_RETURN(res);
     uint32_t copySize = min(size,MAX_RAM_SIZE);
-    res = I2CWriteReg(I2C_ADDRESS, REG_RAM_DATA, (uint8_t*)buf, copySize);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_RAM_DATA, (uint8_t*)buf, copySize);
     CHECK_ERROR_RETURN(res);
     return 0;
 }
 
-int32_t rt903x_stream_data(const uint8_t* buf, int32_t size)
+int32_t rt903x_stream_data(rt903_i2c_config_t i2c_config, const uint8_t* buf, int32_t size)
 {
-    return I2CWriteReg(I2C_ADDRESS, REG_STREAM_DATA, (uint8_t*)buf, size);
+    return I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_STREAM_DATA, (uint8_t*)buf, size);
 }
 
-int32_t rt903x_chip_id(void)
+int32_t rt903x_chip_id(rt903_i2c_config_t i2c_config)
 {
     int32_t res = 0;
     uint8_t reg_val;
-    res = I2CReadReg(I2C_ADDRESS, 0, &reg_val, 1);
+    res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, 0, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     rt903x_config.chip_id = reg_val;
     if(CHIP_ID != reg_val)
@@ -216,66 +211,66 @@ int32_t rt903x_chip_id(void)
     return 0;
 }
 
-int32_t rt903x_clear_int(void)
+int32_t rt903x_clear_int(rt903_i2c_config_t i2c_config)
 {
     uint8_t reg_val;
-    return I2CReadReg(I2C_ADDRESS, REG_INT_STATUS, &reg_val, 1);
+    return I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_INT_STATUS, &reg_val, 1);
 }
 
-int32_t rt903x_clear_protection(void)
+int32_t rt903x_clear_protection(rt903_i2c_config_t i2c_config)
 {
     int32_t res = 0;
     uint8_t reg_val = 0;
 
-    res = I2CReadReg(I2C_ADDRESS, REG_BEMF_CFG2, &reg_val, 1);
+    res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CFG2, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val |= 0x02;
-    res = I2CWriteReg(I2C_ADDRESS, REG_BEMF_CFG2, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CFG2, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val &= 0xfd;
-    res = I2CWriteReg(I2C_ADDRESS, REG_BEMF_CFG2, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CFG2, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
 
     return 0;
 }
 
-int32_t rt903x_boost_voltage(RT903X_BOOST_VOLTAGE vout)
+int32_t rt903x_boost_voltage(rt903_i2c_config_t i2c_config, RT903X_BOOST_VOLTAGE vout)
 {
     int32_t res = 0;
     uint8_t reg_val;
-    res = I2CReadReg(I2C_ADDRESS, REG_BOOST_CFG3, &reg_val, 1);
+    res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BOOST_CFG3, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = (reg_val & 0xF0) | ((uint8_t)vout & 0x0F);
-    return I2CWriteReg(I2C_ADDRESS, REG_BOOST_CFG3, &reg_val, 1);
+    return I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BOOST_CFG3, &reg_val, 1);
 }
 
-int32_t rt903x_gain(uint8_t gain)
+int32_t rt903x_gain(rt903_i2c_config_t i2c_config, uint8_t gain)
 {
-    return I2CWriteReg(I2C_ADDRESS, REG_GAIN_CFG, &gain, 1);
+    return I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_GAIN_CFG, &gain, 1);
 }
 
-int32_t rt903x_play_mode(RT903X_PLAY_MODE mode)
+int32_t rt903x_play_mode(rt903_i2c_config_t i2c_config, RT903X_PLAY_MODE mode)
 {
     uint8_t reg_val = (uint8_t)mode;
-    return I2CWriteReg(I2C_ADDRESS, REG_PLAY_MODE, &reg_val, 1);
+    return I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_PLAY_MODE, &reg_val, 1);
 }
 
-static int32_t rt903x_efuse_read(uint8_t index, uint8_t *data)
+static int32_t rt903x_efuse_read(rt903_i2c_config_t i2c_config, uint8_t index, uint8_t *data)
 {
     int32_t res = 0;
     uint8_t reg_val;
     reg_val = index;
-    res = I2CWriteReg(I2C_ADDRESS, REG_EFS_ADDR_INDEX, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_EFS_ADDR_INDEX, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = BIT_EFS_READ;
-    res = I2CWriteReg(I2C_ADDRESS, REG_EFS_MODE_CTRL, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_EFS_MODE_CTRL, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     ics_delay_ms(1);
-    res = I2CReadReg(I2C_ADDRESS, REG_EFS_MODE_CTRL, &reg_val, 1);
+    res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_EFS_MODE_CTRL, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     if ((reg_val & BIT_EFS_READ) == 0)
     {
-        res = I2CReadReg(I2C_ADDRESS, REG_EFS_RD_DATA, &reg_val, 1);
+        res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_EFS_RD_DATA, &reg_val, 1);
         CHECK_ERROR_RETURN(res);
         *data = (uint8_t)reg_val;
         return 1;
@@ -283,7 +278,7 @@ static int32_t rt903x_efuse_read(uint8_t index, uint8_t *data)
     return 0;
 }
 
-int32_t rt903x_apply_trim()
+int32_t rt903x_apply_trim(rt903_i2c_config_t i2c_config)
 {
     int32_t res = 0;
     uint8_t reg_val;
@@ -291,13 +286,13 @@ int32_t rt903x_apply_trim()
     uint8_t trim_val, *efs_data_p;
     /* soft reset */
     reg_val = 0x01;
-    res = I2CWriteReg(I2C_ADDRESS, REG_SOFT_RESET, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_SOFT_RESET, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     /* read out trim data from efuse */
     efs_data_p = (uint8_t*)&efs_data;
     for(int32_t i = 0; i < 4; ++i)
     {
-        res = rt903x_efuse_read(i, efs_data_p + i);
+        res = rt903x_efuse_read(i2c_config, i, efs_data_p + i);
         CHECK_ERROR_RETURN(res);
     }
     /* apply trim data */
@@ -305,51 +300,51 @@ int32_t rt903x_apply_trim()
     reg_val = trim_val << 6;
     trim_val = (efs_data & EFS_PMU_LDO_TRIM_MASK) >> EFS_PMU_LDO_TRIM_OFFSET;
     reg_val |= (trim_val << 4);
-    res = I2CWriteReg(I2C_ADDRESS, REG_PMU_CFG3, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_PMU_CFG3, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     trim_val = (efs_data & EFS_BIAS_1P2V_TRIM_MASK) >> EFS_BIAS_1P2V_TRIM_OFFSET;
     reg_val = trim_val << 4;
     trim_val = (efs_data & EFS_BIAS_I_TRIM_MASK) >> EFS_BIAS_I_TRIM_OFFSET;
     reg_val |= trim_val;
-    res = I2CWriteReg(I2C_ADDRESS, REG_PMU_CFG4, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_PMU_CFG4, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     trim_val = (efs_data & EFS_OSC_TRIM_MASK) >> EFS_OSC_TRIM_OFFSET;
     trim_val ^= 0x80;
     reg_val = trim_val;
-    res = I2CWriteReg(I2C_ADDRESS, REG_OSC_CFG1, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_OSC_CFG1, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x0F;
-    res = I2CWriteReg(I2C_ADDRESS, 0x2A, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, 0x2A, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x00;
-    res = I2CWriteReg(I2C_ADDRESS, REG_BEMF_CFG1, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CFG1, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x01;
-    res = I2CWriteReg(I2C_ADDRESS, REG_BEMF_CFG2, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CFG2, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x01;
-    res = I2CWriteReg(I2C_ADDRESS, REG_BOOST_CFG1, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BOOST_CFG1, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x05;
-    res = I2CWriteReg(I2C_ADDRESS, REG_BOOST_CFG2, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BOOST_CFG2, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x0A;
-    res = I2CWriteReg(I2C_ADDRESS, REG_BOOST_CFG3, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BOOST_CFG3, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x50;
-    res = I2CWriteReg(I2C_ADDRESS, REG_BOOST_CFG4, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BOOST_CFG4, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x1C;
-    res = I2CWriteReg(I2C_ADDRESS, REG_BOOST_CFG5, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BOOST_CFG5, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x2C;
-    res = I2CWriteReg(I2C_ADDRESS, REG_PA_CFG1, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_PA_CFG1, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x03;
-    res = I2CWriteReg(I2C_ADDRESS, REG_PA_CFG2, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_PA_CFG2, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x1C;
-    res = I2CWriteReg(I2C_ADDRESS, REG_PMU_CFG2, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_PMU_CFG2, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
 //    trim_val = (efs_data & EFS_VBAT_DET_TRIM_MASK) >> EFS_VBAT_DET_TRIM_OFFSET;
 //    int32_t offset_val = (trim_val & 0x0F) * 313;
@@ -364,43 +359,43 @@ int32_t rt903x_apply_trim()
     return 0;
 }
 
-int32_t rt903x_go(uint8_t val)
+int32_t rt903x_go(rt903_i2c_config_t i2c_config, uint8_t val)
 {
-    return I2CWriteReg(I2C_ADDRESS, REG_PLAY_CTRL, &val, 1);
+    return I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_PLAY_CTRL, &val, 1);
 }
 
-int32_t rt903x_calc_f0(void)
+int32_t rt903x_calc_f0(rt903_i2c_config_t i2c_config)
 {
     int32_t res = 0;
     uint8_t reg_val1, reg_val2;
     uint16_t cz_val1 = 0, cz_val2 = 0, cz_val3 = 0, cz_val4 = 0, cz_val5 = 0;
-    res = I2CReadReg(I2C_ADDRESS, REG_BEMF_CZ1_VAL1, &reg_val1, 1);
+    res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CZ1_VAL1, &reg_val1, 1);
     CHECK_ERROR_RETURN(res);
-    res = I2CReadReg(I2C_ADDRESS, REG_BEMF_CZ1_VAL2, &reg_val2, 1);
+    res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CZ1_VAL2, &reg_val2, 1);
     CHECK_ERROR_RETURN(res);
     cz_val1 = (uint16_t)(reg_val2 & 0x3F);
     cz_val1 = (uint16_t)((cz_val1 << 8) | reg_val1);
-    res = I2CReadReg(I2C_ADDRESS, REG_BEMF_CZ2_VAL1, &reg_val1, 1);
+    res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CZ2_VAL1, &reg_val1, 1);
     CHECK_ERROR_RETURN(res);
-    res = I2CReadReg(I2C_ADDRESS, REG_BEMF_CZ2_VAL2, &reg_val2, 1);
+    res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CZ2_VAL2, &reg_val2, 1);
     CHECK_ERROR_RETURN(res);
     cz_val2 = (uint16_t)(reg_val2 & 0x3F);
     cz_val2 = (uint16_t)((cz_val2 << 8) | reg_val1);
-    res = I2CReadReg(I2C_ADDRESS, REG_BEMF_CZ3_VAL1, &reg_val1, 1);
+    res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CZ3_VAL1, &reg_val1, 1);
     CHECK_ERROR_RETURN(res);
-    res = I2CReadReg(I2C_ADDRESS, REG_BEMF_CZ3_VAL2, &reg_val2, 1);
+    res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CZ3_VAL2, &reg_val2, 1);
     CHECK_ERROR_RETURN(res);
     cz_val3 = (uint16_t)(reg_val2 & 0x3F);
     cz_val3 = (uint16_t)((cz_val3 << 8) | reg_val1);
-    res = I2CReadReg(I2C_ADDRESS, REG_BEMF_CZ4_VAL1, &reg_val1, 1);
+    res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CZ4_VAL1, &reg_val1, 1);
     CHECK_ERROR_RETURN(res);
-    res = I2CReadReg(I2C_ADDRESS, REG_BEMF_CZ4_VAL2, &reg_val2, 1);
+    res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CZ4_VAL2, &reg_val2, 1);
     CHECK_ERROR_RETURN(res);
     cz_val4 = (uint16_t)(reg_val2 & 0x3F);
     cz_val4 = (uint16_t)((cz_val4 << 8) | reg_val1);
-    res = I2CReadReg(I2C_ADDRESS, REG_BEMF_CZ5_VAL1, &reg_val1, 1);
+    res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CZ5_VAL1, &reg_val1, 1);
     CHECK_ERROR_RETURN(res);
-    res = I2CReadReg(I2C_ADDRESS, REG_BEMF_CZ5_VAL2, &reg_val2, 1);
+    res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CZ5_VAL2, &reg_val2, 1);
     CHECK_ERROR_RETURN(res);
     cz_val5 = (uint16_t)(reg_val2 & 0x3F);
     cz_val5 = (uint16_t)((cz_val5 << 8) | reg_val1);
@@ -410,41 +405,42 @@ int32_t rt903x_calc_f0(void)
     return res;
 }
 
-int32_t rt903x_detect_f0()
+int32_t rt903x_detect_f0(rt903_i2c_config_t i2c_config)
 {
     int32_t res = 0;
     uint8_t reg_val;
     // Clear all interruptions
-    res = I2CReadReg(I2C_ADDRESS, REG_INT_STATUS, &reg_val, 1);
+    res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_INT_STATUS, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     // Fill the list data and waveform data
-    res = rt903x_playlist_data(f0_list_data,F0_LIST_DATA_LEN);
+    res = rt903x_playlist_data(i2c_config, f0_list_data,F0_LIST_DATA_LEN);
     CHECK_ERROR_RETURN(res)
-    res = rt903x_waveform_data((const uint8_t*)f0_wave_data,F0_WAVE_DATA_LEN);
+    res = rt903x_waveform_data(i2c_config, (const uint8_t*)f0_wave_data,F0_WAVE_DATA_LEN);
     CHECK_ERROR_RETURN(res)
     reg_val = 0x20;
-    res = I2CWriteReg(I2C_ADDRESS, REG_GAIN_CFG, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_GAIN_CFG, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x00;
-    res = I2CWriteReg(I2C_ADDRESS, REG_BRAKE_CFG1, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BRAKE_CFG1, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x1;
-    res = I2CWriteReg(I2C_ADDRESS, REG_DETECT_F0_CFG, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_DETECT_F0_CFG, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x26;
-    res = I2CWriteReg(I2C_ADDRESS, REG_BEMF_CFG3, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CFG3, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x20;
-    res = I2CWriteReg(I2C_ADDRESS, REG_BEMF_CFG4, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BEMF_CFG4, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
     reg_val = 0x01;
-    res = I2CWriteReg(I2C_ADDRESS, REG_PLAY_MODE, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_PLAY_MODE, &reg_val, 1);
     CHECK_ERROR_RETURN(res);
-    res = rt903x_go(1);
+    res = rt903x_go(i2c_config, 1);
     CHECK_ERROR_RETURN(res);
+    //  这里存在死循环，需要加retry count来 break
     while (1)
     {
-        res = I2CReadReg(I2C_ADDRESS, REG_PLAY_CTRL, &reg_val, 1);
+        res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_PLAY_CTRL, &reg_val, 1);
         CHECK_ERROR_RETURN(res);
         if (reg_val == 0)
         {
@@ -454,18 +450,18 @@ int32_t rt903x_detect_f0()
     }
 
     ics_delay_ms(20);
-    res = rt903x_calc_f0();
+    res = rt903x_calc_f0(i2c_config);
     CHECK_ERROR_RETURN(res);
 
     return 0;
 }
 
-static int32_t check_stream_play_status(void)
+static int32_t check_stream_play_status(rt903_i2c_config_t i2c_config)
 {
     uint8_t reg_val = 0;
     while (1)
     {
-        int16_t res = I2CReadReg(I2C_ADDRESS, REG_INT_STATUS, &reg_val, 1);
+        int16_t res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_INT_STATUS, &reg_val, 1);
         CHECK_ERROR_RETURN(res);
         if ((reg_val & BIT_INTS_PLAYDONE) > 0)
         {
@@ -482,7 +478,7 @@ static int32_t check_stream_play_status(void)
               return -1;
         }
 
-        res = I2CReadReg(I2C_ADDRESS, REG_PLAY_CTRL, &reg_val, 1);
+        res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_PLAY_CTRL, &reg_val, 1);
         CHECK_ERROR_RETURN(res);
         if ((reg_val & BIT_GO_MASK) == 0)
         {
@@ -493,7 +489,7 @@ static int32_t check_stream_play_status(void)
     }
 }
 
-int32_t rt903x_play_long(uint16_t index, uint8_t gain, uint16_t duration)
+int32_t rt903x_play_long(rt903_i2c_config_t i2c_config, uint16_t index, uint8_t gain, uint16_t duration)
 {
     struct GENERATION_CONFIG gen_config =
     {
@@ -513,26 +509,26 @@ int32_t rt903x_play_long(uint16_t index, uint8_t gain, uint16_t duration)
 
     int32_t res = 0;
     uint8_t reg_val = 0x01;
-    res = I2CWriteReg(I2C_ADDRESS, REG_RAM_CFG, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_RAM_CFG, &reg_val, 1);
     // Clear all interruptions
-    res = rt903x_clear_int();
+    res = rt903x_clear_int(i2c_config);
     CHECK_ERROR_CLEAN(res);
-    res = rt903x_gain(gain);
+    res = rt903x_gain(i2c_config, gain);
     CHECK_ERROR_CLEAN(res);
-    res = rt903x_play_mode(MODE_STREAM_PLAY);
+    res = rt903x_play_mode(i2c_config, MODE_STREAM_PLAY);
     CHECK_ERROR_CLEAN(res);
-    res = rt903x_go(1);
+    res = rt903x_go(i2c_config, 1);
     CHECK_ERROR_CLEAN(res);
 
     while(total_size > total_index)
     {
         int32_t gen_size = min(fifo_size, total_size - total_index);
         ics_generation_waveform(sin_gen_buf, gen_size);
-        res = rt903x_stream_data((const uint8_t*)sin_gen_buf, gen_size);
+        res = rt903x_stream_data(i2c_config, (const uint8_t*)sin_gen_buf, gen_size);
         CHECK_ERROR_CLEAN(res);
         total_index += gen_size;
             
-        res = check_stream_play_status();
+        res = check_stream_play_status(i2c_config);
         CHECK_ERROR_CLEAN(res);
         if (res == 0)     // FIFO AE
         {
@@ -550,7 +546,7 @@ err:
     return res;
 }
 
-int32_t rt903x_play_transient(uint16_t index, uint8_t gain, uint16_t loop)
+int32_t rt903x_play_transient(rt903_i2c_config_t i2c_config, uint16_t index, uint8_t gain, uint16_t loop)
 {
     struct RESAMPLE_CONFIG resample_config =
     {
@@ -571,15 +567,15 @@ int32_t rt903x_play_transient(uint16_t index, uint8_t gain, uint16_t loop)
 
     int32_t res = 0;
     uint8_t reg_val = 0x01;
-    res = I2CWriteReg(I2C_ADDRESS, REG_RAM_CFG, &reg_val, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_RAM_CFG, &reg_val, 1);
     // Clear all interruptions
-    res = rt903x_clear_int();
+    res = rt903x_clear_int(i2c_config);
     CHECK_ERROR_CLEAN(res);
-    res = rt903x_gain(gain);
+    res = rt903x_gain(i2c_config, gain);
     CHECK_ERROR_CLEAN(res);
-    res = rt903x_play_mode(MODE_STREAM_PLAY);
+    res = rt903x_play_mode(i2c_config, MODE_STREAM_PLAY);
     CHECK_ERROR_CLEAN(res);
-    res = rt903x_go(1);
+    res = rt903x_go(i2c_config, 1);
     CHECK_ERROR_CLEAN(res);
 
     while(total_size > total_index)
@@ -589,13 +585,13 @@ int32_t rt903x_play_transient(uint16_t index, uint8_t gain, uint16_t loop)
         {
             int32_t buf_offset = total_index % resample_size;
             int32_t batch_size = min(stream_size, resample_size - buf_offset);                    
-            res = rt903x_stream_data((const uint8_t*)resample_buf + buf_offset, batch_size);
+            res = rt903x_stream_data(i2c_config, (const uint8_t*)resample_buf + buf_offset, batch_size);
             CHECK_ERROR_CLEAN(res);
             stream_size -= batch_size;
             total_index += batch_size;
         }
 
-        res = check_stream_play_status();
+        res = check_stream_play_status(i2c_config);
         CHECK_ERROR_CLEAN(res);
         if (res == 0)     // FIFO AE
         {

@@ -85,12 +85,12 @@ const int8_t stream_data[] =
 uint8_t stream_demo_flag = 0;
 uint32_t data_demo_index = 0;
 
-int32_t stream_play_demo_proc(void)
+int32_t stream_play_demo_proc(rt903_i2c_config_t i2c_config)
 {
     uint8_t reg_val = 0;
     while (1)
     {
-        int16_t res = I2CReadReg(I2C_ADDRESS, REG_INT_STATUS, &reg_val, 1);
+        int16_t res = I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_INT_STATUS, &reg_val, 1);
         CHECK_ERROR_RETURN(res);
         if ((reg_val & BIT_INTS_PLAYDONE) > 0)
         {
@@ -110,7 +110,7 @@ int32_t stream_play_demo_proc(void)
             int32_t stream_size = ((rt903x_config.ram_param.ListBaseAddrH << 8) | rt903x_config.ram_param.ListBaseAddrL)
                 - ((rt903x_config.ram_param.FifoAEH << 8) | rt903x_config.ram_param.FifoAEL);
             stream_size = min(STREAM_DATA_LEN - data_demo_index, stream_size);
-            res = rt903x_stream_data((const uint8_t*)stream_data + data_demo_index, stream_size);
+            res = rt903x_stream_data(i2c_config, (const uint8_t*)stream_data + data_demo_index, stream_size);
             CHECK_ERROR_RETURN(res);
             data_demo_index += stream_size;
             if (data_demo_index >= STREAM_DATA_LEN)
@@ -123,28 +123,28 @@ int32_t stream_play_demo_proc(void)
     return 0;
 }
 
-int32_t rt903x_stream_play_demo(void)
+int32_t rt903x_stream_play_demo(rt903_i2c_config_t i2c_config)
 {
     int32_t res = 0;
     uint8_t regvalue = 0x01;
-    res = I2CWriteReg(I2C_ADDRESS, REG_RAM_CFG, &regvalue, 1);
+    res = I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_RAM_CFG, &regvalue, 1);
     // Clear all interruptions
-    res = rt903x_clear_int();
+    res = rt903x_clear_int(i2c_config);
     CHECK_ERROR_RETURN(res);
-    res = rt903x_gain(0x32);
+    res = rt903x_gain(i2c_config, 0x32);
     CHECK_ERROR_RETURN(res);
-    res = rt903x_boost_voltage(BOOST_VOUT_850);
+    res = rt903x_boost_voltage(i2c_config, BOOST_VOUT_850);
     CHECK_ERROR_RETURN(res);
-    res = rt903x_play_mode(MODE_STREAM_PLAY);
+    res = rt903x_play_mode(i2c_config, MODE_STREAM_PLAY);
     CHECK_ERROR_RETURN(res);
-    res = rt903x_go(1);
+    res = rt903x_go(i2c_config, 1);
     CHECK_ERROR_RETURN(res);
     int32_t stream_size = (rt903x_config.ram_param.ListBaseAddrH << 8) | rt903x_config.ram_param.ListBaseAddrL;
     stream_size = min(STREAM_DATA_LEN, stream_size);
-    res = rt903x_stream_data((const uint8_t*)stream_data, stream_size);
+    res = rt903x_stream_data(i2c_config, (const uint8_t*)stream_data, stream_size);
     CHECK_ERROR_RETURN(res);
     data_demo_index += stream_size;
-    res = stream_play_demo_proc();
+    res = stream_play_demo_proc(i2c_config);
     CHECK_ERROR_RETURN(res);
 		data_demo_index = 0;
 	

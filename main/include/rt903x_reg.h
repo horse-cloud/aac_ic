@@ -4,6 +4,9 @@
 /******************************************************************************
  * rt903x register address
 ******************************************************************************/
+
+#define RT903_I2C_1_ADDRESS			    0x5E
+#define RT903_I2C_2_ADDRESS			    0x5F
 #define REG_DEV_ID                      0x00
 #define REG_REV_ID                      0x01
 #define REG_SOFT_RESET                  0x02
@@ -171,6 +174,4 @@
 #define EFS_RL_DET_TRIM_MASK            0x3F800000
 #define EFS_VERSION_MASK                0xC0000000
 
-
-int32_t rt903x_stream_play_demo(void);
 #endif // __RT903X_REG_LIST_H__

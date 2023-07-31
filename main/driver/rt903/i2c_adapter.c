@@ -21,16 +21,16 @@ static const char *TAG = "i2c_adapter";
 /**
  * @brief i2c master initialization
  */
-esp_err_t i2c_master_init(void)
+esp_err_t i2c_master_init(def_i2c_config_t i2cConfig)
 {
-    int i2c_master_port = I2C_MASTER_NUM;
+    int i2c_master_port = i2cConfig.i2c_master_num;
     i2c_config_t conf = {
         .mode = I2C_MODE_MASTER,
-        .sda_io_num = I2C_MASTER_SDA_IO,
+        .sda_io_num = i2cConfig.i2c_master_sda_io,
         .sda_pullup_en = GPIO_PULLUP_ENABLE,
-        .scl_io_num = I2C_MASTER_SCL_IO,
+        .scl_io_num = i2cConfig.i2c_master_scl_io,
         .scl_pullup_en = GPIO_PULLUP_ENABLE,
-        .master.clk_speed = I2C_MASTER_FREQ_HZ,
+        .master.clk_speed = i2cConfig.i2c_master_freq_hz,
         // .clk_flags = 0,          /*!< Optional, you can use I2C_SCLK_SRC_FLAG_* flags to choose i2c source clock here. */
     };
     esp_err_t err = i2c_param_config(i2c_master_port, &conf);
@@ -42,7 +42,7 @@ esp_err_t i2c_master_init(void)
 
 
 
-int16_t I2CReadReg(uint16_t devAddr, uint16_t ReadAddr, uint8_t *data_wr, uint16_t len) {
+int16_t I2CReadReg(uint8_t i2c_master_num, uint16_t devAddr, uint16_t ReadAddr, uint8_t *data_wr, uint16_t len) {
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_start(cmd);
     i2c_master_write_byte(cmd, devAddr << 1 | WRITE_BIT, ACK_CHECK_EN);
@@ -55,7 +55,7 @@ int16_t I2CReadReg(uint16_t devAddr, uint16_t ReadAddr, uint8_t *data_wr, uint16
     }
     i2c_master_read_byte(cmd, data_wr + len - 1, NACK_VAL);
     i2c_master_stop(cmd);
-    esp_err_t ret = i2c_master_cmd_begin(I2C_MASTER_NUM, cmd, 1000 / portTICK_PERIOD_MS);
+    esp_err_t ret = i2c_master_cmd_begin(i2c_master_num, cmd, 1000 / portTICK_PERIOD_MS);
     i2c_cmd_link_delete(cmd);
 	if (0 != ret){
 		ESP_LOGI(TAG, "I2CReadReg,ret:%d",ret);
@@ -63,7 +63,7 @@ int16_t I2CReadReg(uint16_t devAddr, uint16_t ReadAddr, uint8_t *data_wr, uint16
     return 0;
 }
 
-int16_t I2CWriteReg(uint16_t devAddr, uint16_t WriteAddr, uint8_t *data_wr, uint16_t length) {
+int16_t I2CWriteReg(uint8_t i2c_master_num, uint16_t devAddr, uint16_t WriteAddr, uint8_t *data_wr, uint16_t length) {
 	esp_err_t ret = 0;
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     ret = i2c_master_start(cmd);
@@ -73,7 +73,7 @@ int16_t I2CWriteReg(uint16_t devAddr, uint16_t WriteAddr, uint8_t *data_wr, uint
         ret = i2c_master_write_byte(cmd, data_wr[i], ACK_CHECK_EN);
     }
     ret = i2c_master_stop(cmd);
-    ret = i2c_master_cmd_begin(I2C_MASTER_NUM, cmd, 1000 / portTICK_PERIOD_MS);
+    ret = i2c_master_cmd_begin(i2c_master_num, cmd, 1000 / portTICK_PERIOD_MS);
     i2c_cmd_link_delete(cmd);
 	if (0 != ret){
 		ESP_LOGI(TAG, "I2CWriteReg,ret:%d",ret);

@@ -160,6 +160,7 @@ void ussys_tp_main(void)
 	ussys_tp_dev_t ussys_tp_dev[BUTTON_NUM];
 	uint64_t ts = 0;
 	int i = 0;
+	int rc = 0;
 	
 	for (int i = 0; i < BUTTON_NUM; i++) {
 		ussys_tp_dev_t *dev = &ussys_tp_dev[i];
@@ -180,7 +181,7 @@ void ussys_tp_main(void)
 		dev->store_cal_param	= ussys_store_cal_param;
 		ussys_tp_if_init(dev);
 	}
-	
+#if 0	
 	ts = ussys_get_timestamp_us();
 	uint8_t last_status = 1;//default status  is released
 	while (1) {
@@ -246,5 +247,6 @@ void ussys_tp_main(void)
 		}
 		#endif
 	}
+#endif
 }
 

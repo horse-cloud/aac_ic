@@ -14,12 +14,6 @@
 # EXTERNAL cache entries
 ########################
 
-//No help, variable specified on the command line.
-CCACHE_ENABLE:UNINITIALIZED=1
-
-//Path to a program.
-CCACHE_FOUND:FILEPATH=D:/Espressif/tools/ccache/4.6.2/ccache-4.6.2-windows-x86_64/ccache.exe
-
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=D:/Espressif/tools/xtensa-esp32s3-elf/esp-2022r1-11.2.0/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-addr2line.exe
 
@@ -100,7 +94,7 @@ CMAKE_C_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
 CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 
 //Path to a program.
-CMAKE_DLLTOOL:FILEPATH=D:/Program Files (x86)/mingw64/bin/dlltool.exe
+CMAKE_DLLTOOL:FILEPATH=D:/minGW/bin/dlltool.exe
 
 //Flags used by the linker during all build types.
 CMAKE_EXE_LINKER_FLAGS:STRING=
@@ -117,8 +111,8 @@ CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=
 //Flags used by the linker during RELWITHDEBINFO builds.
 CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
-//No help, variable specified on the command line.
-CMAKE_EXPORT_COMPILE_COMMANDS:UNINITIALIZED=ON
+//Enable/Disable output of compile commands during generation.
+CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=
 
 //Value Computed by CMake.
 CMAKE_FIND_PACKAGE_REDIRECTS_DIR:STATIC=E:/Espressif/workspace/aac_ic/build/CMakeFiles/pkgRedirects
@@ -292,11 +286,14 @@ ENABLE_PROGRAMS:BOOL=
 //Build mbed TLS tests.
 ENABLE_TESTING:BOOL=
 
+//No help, variable specified on the command line.
+ESP_PLATFORM:UNINITIALIZED=1
+
 //Generate the auto-generated files as needed
 GEN_FILES:BOOL=
 
 //Git command line client
-GIT_EXECUTABLE:FILEPATH=C:/Program Files/Git/cmd/git.exe
+GIT_EXECUTABLE:FILEPATH=D:/Espressif/tools/idf-git/2.39.2/cmd/git.exe
 
 //IDF Build Target
 IDF_TARGET:STRING=esp32s3
@@ -315,6 +312,9 @@ LINK_WITH_TRUSTED_STORAGE:BOOL=OFF
 
 //Compiler warnings treated as errors
 MBEDTLS_FATAL_WARNINGS:BOOL=ON
+
+//No help, variable specified on the command line.
+PYTHON_DEPS_CHECKED:UNINITIALIZED=1
 
 //Allow unsafe builds. These builds ARE NOT SECURE.
 UNSAFE_BUILD:BOOL=OFF
@@ -443,6 +443,8 @@ CMAKE_EXE_LINKER_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1
 CMAKE_EXE_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO
 CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_EXPORT_COMPILE_COMMANDS
+CMAKE_EXPORT_COMPILE_COMMANDS-ADVANCED:INTERNAL=1
 //Name of external makefile project generator.
 CMAKE_EXTRA_GENERATOR:INTERNAL=
 //Name of generator.
@@ -549,9 +551,9 @@ CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS
 C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS:INTERNAL=1
 //Details about finding Git
-FIND_PACKAGE_MESSAGE_DETAILS_Git:INTERNAL=[C:/Program Files/Git/cmd/git.exe][v2.37.0.windows.1()]
+FIND_PACKAGE_MESSAGE_DETAILS_Git:INTERNAL=[D:/Espressif/tools/idf-git/2.39.2/cmd/git.exe][v2.39.2.windows.1()]
 //Details about finding Python3
-FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[D:/python/python.exe][cfound components: Interpreter ][v3.8.5()]
+FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[d:/Espressif/python_env/idf5.0_py3.11_env/Scripts/python.exe][cfound components: Interpreter ][v3.11.2()]
 //ADVANCED property for variable: GIT_EXECUTABLE
 GIT_EXECUTABLE-ADVANCED:INTERNAL=1
 //Have include stddef.h
@@ -566,9 +568,8 @@ HAVE_TIME_T_SIZE:INTERNAL=TRUE
 TIME_T_SIZE:INTERNAL=8
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=C:/Program Files (x86)/app-template
-//Path to a program.
-_Python3_EXECUTABLE:INTERNAL=D:/python/python.exe
+_Python3_EXECUTABLE:INTERNAL=d:/Espressif/python_env/idf5.0_py3.11_env/Scripts/python.exe
 //Python3 Properties
-_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;8;5;32;;;D:\python\Lib;D:\python\Lib;D:\python\Lib\site-packages;D:\python\Lib\site-packages
-_Python3_INTERPRETER_SIGNATURE:INTERNAL=65d845b4174f4e51f11f700963e29587
+_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;11;2;32;;;d:\Espressif\tools\idf-python\3.11.2\Lib;d:\Espressif\tools\idf-python\3.11.2\Lib;d:\Espressif\python_env\idf5.0_py3.11_env\Lib\site-packages;d:\Espressif\python_env\idf5.0_py3.11_env\Lib\site-packages
+_Python3_INTERPRETER_SIGNATURE:INTERNAL=dfc6f89e70126639d0309d8bc45256a0
 

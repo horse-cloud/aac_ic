@@ -39,30 +39,30 @@ const int8_t wave_data[] =
 };
 #define WAVE_DATA_LEN        sizeof(wave_data)
 
-int16_t rt903x_Ram_Play_Demo(void)
+int16_t rt903x_Ram_Play_Demo(rt903_i2c_config_t i2c_config)
 {
 	int16_t res = 0;
 
 	// Clear all interruptions
-	res = rt903x_clear_int();
+	res = rt903x_clear_int(i2c_config);
   	CHECK_ERROR_RETURN(res);
 
 	// Fill the list data and waveform data
-	res = rt903x_playlist_data(list_data,LIST_DATA_LEN);
+	res = rt903x_playlist_data(i2c_config, list_data,LIST_DATA_LEN);
 	CHECK_ERROR_RETURN(res);
 	// Fill the waveform data.
-	res = rt903x_waveform_data((const uint8_t*)wave_data,WAVE_DATA_LEN);
+	res = rt903x_waveform_data(i2c_config, (const uint8_t*)wave_data,WAVE_DATA_LEN);
 	CHECK_ERROR_RETURN(res);
 	
-	res = rt903x_gain(0x80);
+	res = rt903x_gain(i2c_config, 0x80);
 	CHECK_ERROR_RETURN(res);
-	res = rt903x_boost_voltage(BOOST_VOUT_850);
-	CHECK_ERROR_RETURN(res);
-
-	res = rt903x_play_mode(MODE_RAM_PLAY);
+	res = rt903x_boost_voltage(i2c_config, BOOST_VOUT_850);
 	CHECK_ERROR_RETURN(res);
 
-	res = rt903x_go(1);
+	res = rt903x_play_mode(i2c_config, MODE_RAM_PLAY);
+	CHECK_ERROR_RETURN(res);
+
+	res = rt903x_go(i2c_config, 1);
 	CHECK_ERROR_RETURN(res);
 	
 	return 0;

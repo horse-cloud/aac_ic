@@ -1,0 +1,11 @@
+{
+    "idf.adapterTargetName": "esp32s3",
+    "idf.portWin": "COM12",
+    "idf.flashType": "UART",
+    "files.associations": {
+        "i2c_adapter.h": "c",
+        "ics_util.h": "c",
+        "rt903x_reg.h": "c",
+        "filesystem.h": "c"
+    }
+}

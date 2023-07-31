@@ -50,7 +50,19 @@
 #define NACK_VAL 0x1                /*!< I2C nack value */
 
 //
-#define I2C_ADDRESS			(0x5F)
+#define I2C_MASTER_NUM0              0          /*!< I2C master i2c port number, the number of i2c peripheral interfaces available will depend on the chip */
+#define I2C_MASTER_NUM1              1          /*!< I2C master i2c port number, the number of i2c peripheral interfaces available will depend on the chip */
+#define I2C_MASTER_0_SCL_IO           CONFIG_I2C_MASTER_0_SCL  /*!< GPIO number used for I2C master clock */
+#define I2C_MASTER_0_SDA_IO           CONFIG_I2C_MASTER_0_SDA  /*!< GPIO number used for I2C master data  */
+#define I2C_MASTER_1_SCL_IO           CONFIG_I2C_MASTER_1_SCL  /*!< GPIO number used for I2C master clock */
+#define I2C_MASTER_1_SDA_IO           CONFIG_I2C_MASTER_1_SDA  /*!< GPIO number used for I2C master data  */
+#define I2C_MASTER_NUM              0                          
+#define I2C_MASTER_FREQ_HZ          400000                     /*!< I2C master clock frequency */
+#define I2C_MASTER_TX_BUF_DISABLE   0                          /*!< I2C master doesn't need buffer */
+#define I2C_MASTER_RX_BUF_DISABLE   0                          /*!< I2C master doesn't need buffer */
+#define I2C_MASTER_TIMEOUT_MS       1000
+#define I2C_0_ADDRESS			(0x5E)
+#define I2C_1_ADDRESS			(0x5F)
 //#define I2C_TIMING    0x00401040//0x00901954
 //#define I2C_TIMING    0x20301850//300k
 #define I2C_TIMING    0x00401032 //1m
@@ -66,9 +78,16 @@
 #define I2C_MASTER_TIMEOUT_MS       1000
 
 
-esp_err_t i2c_master_init(void);
-int16_t I2CWriteReg(uint16_t devAddr, uint16_t WriteAddr, uint8_t *data_wr, uint16_t length);
-int16_t I2CReadReg(uint16_t devAddr, uint16_t ReadAddr, uint8_t *data_wr, uint16_t len);
-//int16_t I2CWaitUntilReady(uint32_t timeout);
+typedef struct {
+    uint8_t i2c_master_num;
+    uint8_t i2c_master_sda_io;
+    uint8_t i2c_master_scl_io; 
+    uint32_t i2c_master_freq_hz;
+} def_i2c_config_t;
+
+
+esp_err_t i2c_master_init(def_i2c_config_t i2cConfig);
+int16_t I2CWriteReg(uint8_t i2c_master_num, uint16_t devAddr, uint16_t WriteAddr, uint8_t *data_wr, uint16_t length);
+int16_t I2CReadReg(uint8_t i2c_master_num, uint16_t devAddr, uint16_t ReadAddr, uint8_t *data_wr, uint16_t len);
 
 #endif	// __I2C_ADAPTER_H__
