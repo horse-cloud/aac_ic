@@ -133,8 +133,6 @@ void app_main(void)
     while (true) {
         printf("Hello from app_main!\n");
         vTaskDelay(portMAX_DELAY);
-        //RAM play
-        // if(is_rt903_online(RT903_INFO[0])){
     }
 
 }
