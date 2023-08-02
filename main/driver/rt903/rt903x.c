@@ -30,6 +30,7 @@ struct RT903X_CONFIG rt903x_config =
 
 const int8_t f0_wave_data[] =
 {
+    //  0XE7 值超过了int8_t的值        mshuai
     0x02,0x24,0x00,0xE7,
     0,17,34,50,65,79,92,103,112,119,124,126,126,124,119,113,104,93,80,66,51,35,18,1,-15,
 	-32,-49,-64,-78,-91,-102,-111,-119,-123,-126,-126,-124,-120,-113,-105,-94,-81,-68,-52,
@@ -93,13 +94,13 @@ wave_des wave_data_list[10]=
 #define MAX_RAM_SIZE            0x600    // 1.5K Bytes
 #define EFS_BYTE_NUM            4
 
-int32_t rt903x_soft_reset(rt903_i2c_config_t i2c_config)
+int32_t rt903x_soft_reset(DEF_RT903_INFO i2c_config)
 {
     uint8_t reg_val = 0x01;
     return I2CWriteReg(i2c_config.i2c_master_num,  i2c_config.i2c_address, REG_SOFT_RESET, &reg_val, 1);
 }
 
-int32_t rt903x_init(rt903_i2c_config_t i2c_config)
+int32_t rt903x_init(DEF_RT903_INFO i2c_config)
 {
     int32_t res = 0;
     uint8_t reg_val;
@@ -155,7 +156,7 @@ int32_t rt903x_init(rt903_i2c_config_t i2c_config)
     return 0;
 }
 
-int32_t rt903x_playlist_data(rt903_i2c_config_t i2c_config, const uint8_t* buf, int32_t size)
+int32_t rt903x_playlist_data(DEF_RT903_INFO i2c_config, const uint8_t* buf, int32_t size)
 {
     int32_t res = 0;
     uint8_t reg_val;
@@ -173,7 +174,7 @@ int32_t rt903x_playlist_data(rt903_i2c_config_t i2c_config, const uint8_t* buf, 
     return 0;
 }
 
-int32_t rt903x_waveform_data(rt903_i2c_config_t i2c_config, const uint8_t* buf, int32_t size)
+int32_t rt903x_waveform_data(DEF_RT903_INFO i2c_config, const uint8_t* buf, int32_t size)
 {
     int32_t res = 0;
     uint8_t reg_val;
@@ -192,12 +193,12 @@ int32_t rt903x_waveform_data(rt903_i2c_config_t i2c_config, const uint8_t* buf, 
     return 0;
 }
 
-int32_t rt903x_stream_data(rt903_i2c_config_t i2c_config, const uint8_t* buf, int32_t size)
+int32_t rt903x_stream_data(DEF_RT903_INFO i2c_config, const uint8_t* buf, int32_t size)
 {
     return I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_STREAM_DATA, (uint8_t*)buf, size);
 }
 
-int32_t rt903x_chip_id(rt903_i2c_config_t i2c_config)
+int32_t rt903x_chip_id(DEF_RT903_INFO i2c_config)
 {
     int32_t res = 0;
     uint8_t reg_val;
@@ -211,13 +212,13 @@ int32_t rt903x_chip_id(rt903_i2c_config_t i2c_config)
     return 0;
 }
 
-int32_t rt903x_clear_int(rt903_i2c_config_t i2c_config)
+int32_t rt903x_clear_int(DEF_RT903_INFO i2c_config)
 {
     uint8_t reg_val;
     return I2CReadReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_INT_STATUS, &reg_val, 1);
 }
 
-int32_t rt903x_clear_protection(rt903_i2c_config_t i2c_config)
+int32_t rt903x_clear_protection(DEF_RT903_INFO i2c_config)
 {
     int32_t res = 0;
     uint8_t reg_val = 0;
@@ -234,7 +235,7 @@ int32_t rt903x_clear_protection(rt903_i2c_config_t i2c_config)
     return 0;
 }
 
-int32_t rt903x_boost_voltage(rt903_i2c_config_t i2c_config, RT903X_BOOST_VOLTAGE vout)
+int32_t rt903x_boost_voltage(DEF_RT903_INFO i2c_config, RT903X_BOOST_VOLTAGE vout)
 {
     int32_t res = 0;
     uint8_t reg_val;
@@ -244,18 +245,18 @@ int32_t rt903x_boost_voltage(rt903_i2c_config_t i2c_config, RT903X_BOOST_VOLTAGE
     return I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_BOOST_CFG3, &reg_val, 1);
 }
 
-int32_t rt903x_gain(rt903_i2c_config_t i2c_config, uint8_t gain)
+int32_t rt903x_gain(DEF_RT903_INFO i2c_config, uint8_t gain)
 {
     return I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_GAIN_CFG, &gain, 1);
 }
 
-int32_t rt903x_play_mode(rt903_i2c_config_t i2c_config, RT903X_PLAY_MODE mode)
+int32_t rt903x_play_mode(DEF_RT903_INFO i2c_config, RT903X_PLAY_MODE mode)
 {
     uint8_t reg_val = (uint8_t)mode;
     return I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_PLAY_MODE, &reg_val, 1);
 }
 
-static int32_t rt903x_efuse_read(rt903_i2c_config_t i2c_config, uint8_t index, uint8_t *data)
+static int32_t rt903x_efuse_read(DEF_RT903_INFO i2c_config, uint8_t index, uint8_t *data)
 {
     int32_t res = 0;
     uint8_t reg_val;
@@ -278,7 +279,7 @@ static int32_t rt903x_efuse_read(rt903_i2c_config_t i2c_config, uint8_t index, u
     return 0;
 }
 
-int32_t rt903x_apply_trim(rt903_i2c_config_t i2c_config)
+int32_t rt903x_apply_trim(DEF_RT903_INFO i2c_config)
 {
     int32_t res = 0;
     uint8_t reg_val;
@@ -359,12 +360,12 @@ int32_t rt903x_apply_trim(rt903_i2c_config_t i2c_config)
     return 0;
 }
 
-int32_t rt903x_go(rt903_i2c_config_t i2c_config, uint8_t val)
+int32_t rt903x_go(DEF_RT903_INFO i2c_config, uint8_t val)
 {
     return I2CWriteReg(i2c_config.i2c_master_num, i2c_config.i2c_address, REG_PLAY_CTRL, &val, 1);
 }
 
-int32_t rt903x_calc_f0(rt903_i2c_config_t i2c_config)
+int32_t rt903x_calc_f0(DEF_RT903_INFO i2c_config)
 {
     int32_t res = 0;
     uint8_t reg_val1, reg_val2;
@@ -405,7 +406,7 @@ int32_t rt903x_calc_f0(rt903_i2c_config_t i2c_config)
     return res;
 }
 
-int32_t rt903x_detect_f0(rt903_i2c_config_t i2c_config)
+int32_t rt903x_detect_f0(DEF_RT903_INFO i2c_config)
 {
     int32_t res = 0;
     uint8_t reg_val;
@@ -456,7 +457,7 @@ int32_t rt903x_detect_f0(rt903_i2c_config_t i2c_config)
     return 0;
 }
 
-static int32_t check_stream_play_status(rt903_i2c_config_t i2c_config)
+static int32_t check_stream_play_status(DEF_RT903_INFO i2c_config)
 {
     uint8_t reg_val = 0;
     while (1)
@@ -489,7 +490,7 @@ static int32_t check_stream_play_status(rt903_i2c_config_t i2c_config)
     }
 }
 
-int32_t rt903x_play_long(rt903_i2c_config_t i2c_config, uint16_t index, uint8_t gain, uint16_t duration)
+int32_t rt903x_play_long(DEF_RT903_INFO i2c_config, uint16_t index, uint8_t gain, uint16_t duration)
 {
     struct GENERATION_CONFIG gen_config =
     {
@@ -546,7 +547,7 @@ err:
     return res;
 }
 
-int32_t rt903x_play_transient(rt903_i2c_config_t i2c_config, uint16_t index, uint8_t gain, uint16_t loop)
+int32_t rt903x_play_transient(DEF_RT903_INFO i2c_config, uint16_t index, uint8_t gain, uint16_t loop)
 {
     struct RESAMPLE_CONFIG resample_config =
     {

@@ -39,7 +39,7 @@ const int8_t wave_data[] =
 };
 #define WAVE_DATA_LEN        sizeof(wave_data)
 
-int16_t rt903x_Ram_Play_Demo(rt903_i2c_config_t i2c_config)
+int16_t rt903x_Ram_Play_Demo(DEF_RT903_INFO i2c_config)
 {
 	int16_t res = 0;
 

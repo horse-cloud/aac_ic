@@ -21,7 +21,7 @@ typedef struct {
     bool is_online;       /*!< record chip is online or not>*/
     uint8_t i2c_master_num;/*!< I2C master number , 0  or 1> */
     uint16_t i2c_address;   /*!< I2C address, 0x5E or 0x5F>*/
-} rt903_i2c_config_t;
+} DEF_RT903_INFO;
 
 struct RT903X_CONFIG {
     uint8_t chip_id;
@@ -62,26 +62,26 @@ typedef enum
     BOOST_VOUT_110    = 15
 } RT903X_BOOST_VOLTAGE;
 
-int32_t rt903x_soft_reset(rt903_i2c_config_t i2c_config);
-int32_t rt903x_apply_trim(rt903_i2c_config_t i2c_config);
-int32_t rt903x_init(rt903_i2c_config_t i2c_config);
-int32_t rt903x_chip_id(rt903_i2c_config_t i2c_config);
-int32_t rt903x_clear_int(rt903_i2c_config_t i2c_config);
-int32_t rt903x_detect_f0(rt903_i2c_config_t i2c_config);
+int32_t rt903x_soft_reset(DEF_RT903_INFO i2c_config);
+int32_t rt903x_apply_trim(DEF_RT903_INFO i2c_config);
+int32_t rt903x_init(DEF_RT903_INFO i2c_config);
+int32_t rt903x_chip_id(DEF_RT903_INFO i2c_config);
+int32_t rt903x_clear_int(DEF_RT903_INFO i2c_config);
+int32_t rt903x_detect_f0(DEF_RT903_INFO i2c_config);
 
-int32_t rt903x_play_long(rt903_i2c_config_t i2c_config, uint16_t index, uint8_t gain, uint16_t duration);
-int32_t rt903x_play_transient(rt903_i2c_config_t i2c_config, uint16_t index, uint8_t gain, uint16_t loop);
+int32_t rt903x_play_long(DEF_RT903_INFO i2c_config, uint16_t index, uint8_t gain, uint16_t duration);
+int32_t rt903x_play_transient(DEF_RT903_INFO i2c_config, uint16_t index, uint8_t gain, uint16_t loop);
 
-int32_t rt903x_stream_data(rt903_i2c_config_t i2c_config, const uint8_t* buf, int32_t size);
-int32_t rt903x_boost_voltage(rt903_i2c_config_t i2c_config, RT903X_BOOST_VOLTAGE vout);
-int32_t rt903x_gain(rt903_i2c_config_t i2c_config, uint8_t gain);
-int32_t rt903x_go(rt903_i2c_config_t i2c_config, uint8_t val);
-int32_t rt903x_play_mode(rt903_i2c_config_t i2c_config, RT903X_PLAY_MODE mode);
-int32_t rt903x_playlist_data(rt903_i2c_config_t i2c_config, const uint8_t* buf, int32_t size);
-int32_t rt903x_waveform_data(rt903_i2c_config_t i2c_config, const uint8_t* buf, int32_t size);
+int32_t rt903x_stream_data(DEF_RT903_INFO i2c_config, const uint8_t* buf, int32_t size);
+int32_t rt903x_boost_voltage(DEF_RT903_INFO i2c_config, RT903X_BOOST_VOLTAGE vout);
+int32_t rt903x_gain(DEF_RT903_INFO i2c_config, uint8_t gain);
+int32_t rt903x_go(DEF_RT903_INFO i2c_config, uint8_t val);
+int32_t rt903x_play_mode(DEF_RT903_INFO i2c_config, RT903X_PLAY_MODE mode);
+int32_t rt903x_playlist_data(DEF_RT903_INFO i2c_config, const uint8_t* buf, int32_t size);
+int32_t rt903x_waveform_data(DEF_RT903_INFO i2c_config, const uint8_t* buf, int32_t size);
 
-int16_t rt903x_Ram_Play_Demo(rt903_i2c_config_t i2c_config);
+int16_t rt903x_Ram_Play_Demo(DEF_RT903_INFO i2c_config);
 
-int32_t rt903x_stream_play_demo(rt903_i2c_config_t i2c_config);
+int32_t rt903x_stream_play_demo(DEF_RT903_INFO i2c_config);
 
 extern struct RT903X_CONFIG rt903x_config;

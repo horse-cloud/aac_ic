@@ -17,7 +17,7 @@
 #define RT903_CHIP_NUMBER_MAX 4
 static QueueHandle_t gpio_evt_queue = NULL;
 
-rt903_i2c_config_t RT903_INFO[RT903_CHIP_NUMBER_MAX] = 
+DEF_RT903_INFO RT903_INFO[RT903_CHIP_NUMBER_MAX] = 
 {
 // {is_online, i2c_master_num, i2c_address, }
     {false, I2C_MASTER_NUM0, I2C_0_ADDRESS},    {false, I2C_MASTER_NUM0, I2C_1_ADDRESS},
@@ -41,7 +41,7 @@ void cust_gpio_pullup_config(uint8_t gpio_num) {
     gpio_config(&io_conf); // 应用配置
 }
 
-bool is_rt903_online(rt903_i2c_config_t rt903)
+bool is_rt903_online(DEF_RT903_INFO rt903)
 {
     return rt903.is_online;
 }
@@ -58,13 +58,15 @@ void rt903_vibrate_task(void* arg) {
                 case GPIO_NUM_6:
                     rt903x_Ram_Play_Demo(RT903_INFO[0]);
                     break;
-                case GPIO_NUM_7:
-                    rt903x_Ram_Play_Demo(RT903_INFO[1]);
+                case GPIO_NUM_7:    
+                    rt903x_Ram_Play_Demo(RT903_INFO[1]);    
                     break;
                 default:
                     break;
             }
-            vTaskDelay(pdMS_TO_TICKS(40));// 延时40ms处理下一个消息
+            // 延时50ms，在延时期间的消息清空，不予响应
+            vTaskDelay(pdMS_TO_TICKS(50));
+            xQueueReset(gpio_evt_queue);
         }
     }
     vTaskDelete(NULL); // 删除任务
@@ -105,7 +107,7 @@ void app_main(void)
     gpio_isr_handler_add(GPIO_NUM_6,cust_gpio_isr_handler,(void*)GPIO_NUM_6);   //第一个参数触发中断源，第二个回调函数，第三个传入参数
     gpio_isr_handler_add(GPIO_NUM_7,cust_gpio_isr_handler,(void*)GPIO_NUM_7);
 
-//i2c 初始化
+//i2c 初始化, 需要放到gpio操作之后，不然gpio的操作会影响i2c
     i2c_master_init(i2cConfig[0]);
     i2c_master_init(i2cConfig[1]);
 
@@ -122,7 +124,7 @@ void app_main(void)
     }
 
 //创建振动处理任务，在gpio触发时处理cust_gpio_isr_handler中发送的消息
-    gpio_evt_queue = xQueueCreate(1, sizeof(uint8_t));
+    gpio_evt_queue = xQueueCreate(10, sizeof(uint8_t));
     xTaskCreate(rt903_vibrate_task, "rt903_vibrate_task", 2048, NULL, 10, NULL);
 //通过判断rt903 chip是否online来决定对应的gpio或者事件是否触发振动task
 
@@ -131,33 +133,8 @@ void app_main(void)
     while (true) {
         printf("Hello from app_main!\n");
         vTaskDelay(portMAX_DELAY);
-
-#if 0
-        //Stream play
-        // rt903x_soft_reset(RT903_INFO[0]);
-        // rt903x_init(RT903_INFO[0]);
-        // rt903x_stream_play_demo(RT903_INFO[0]);
-        // //vTaskDelay(pdMS_TO_TICKS(50));
-        // rt903x_soft_reset(RT903_INFO[1]);
-        // rt903x_init(RT903_INFO[1]);
-        // rt903x_stream_play_demo(RT903_INFO[1]);
-#else
         //RAM play
         // if(is_rt903_online(RT903_INFO[0])){
-        //     rt903x_soft_reset(RT903_INFO[0]);
-        //     rt903x_init(RT903_INFO[0]);
-        //     rt903x_Ram_Play_Demo(RT903_INFO[0]);
-        // }else{
-        //     printf("RT903_INFO[0] is not online, can't vibrate!\n");
-        // }
-        // if(is_rt903_online(RT903_INFO[1])){
-        //     rt903x_soft_reset(RT903_INFO[1]);
-        //     rt903x_init(RT903_INFO[1]);
-        //     rt903x_Ram_Play_Demo(RT903_INFO[1]);
-        // }else{
-        //     printf("RT903_INFO[1] is not online, can't vibrate!\n");
-        // }
-#endif
     }
 
 }

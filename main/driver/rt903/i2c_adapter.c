@@ -59,6 +59,7 @@ int16_t I2CReadReg(uint8_t i2c_master_num, uint16_t devAddr, uint16_t ReadAddr, 
     i2c_cmd_link_delete(cmd);
 	if (0 != ret){
 		ESP_LOGI(TAG, "I2CReadReg,ret:%d",ret);
+        return -1;
 	}
     return 0;
 }
@@ -77,6 +78,7 @@ int16_t I2CWriteReg(uint8_t i2c_master_num, uint16_t devAddr, uint16_t WriteAddr
     i2c_cmd_link_delete(cmd);
 	if (0 != ret){
 		ESP_LOGI(TAG, "I2CWriteReg,ret:%d",ret);
+        return -1;
 	}
     return 0;
 

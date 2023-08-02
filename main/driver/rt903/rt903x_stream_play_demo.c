@@ -85,7 +85,7 @@ const int8_t stream_data[] =
 uint8_t stream_demo_flag = 0;
 uint32_t data_demo_index = 0;
 
-int32_t stream_play_demo_proc(rt903_i2c_config_t i2c_config)
+int32_t stream_play_demo_proc(DEF_RT903_INFO i2c_config)
 {
     uint8_t reg_val = 0;
     while (1)
@@ -123,7 +123,7 @@ int32_t stream_play_demo_proc(rt903_i2c_config_t i2c_config)
     return 0;
 }
 
-int32_t rt903x_stream_play_demo(rt903_i2c_config_t i2c_config)
+int32_t rt903x_stream_play_demo(DEF_RT903_INFO i2c_config)
 {
     int32_t res = 0;
     uint8_t regvalue = 0x01;
