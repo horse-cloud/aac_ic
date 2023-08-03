@@ -12,7 +12,7 @@
 #include "rt903x.h"
 
 
-#define BUTTON_NUM					(1)
+#define BUTTON_NUM					(4)
 #define ENABLE_HARDCODE_CAL_PARAM	(1)
 #define ENABLE_IRQ_TEST				(0)
 
@@ -171,6 +171,10 @@ void ussys_tp_main(void)
 			dev->i2c_addr = 0x27;
 		} 
 		else if (i == 1) {
+			dev->i2c_addr = 0x2F;
+		}else if (i == 2){
+			dev->i2c_addr = 0x37;
+		}else if (i == 3){
 			dev->i2c_addr = 0x3F;
 		}
 

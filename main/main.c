@@ -40,6 +40,15 @@ void cust_gpio_pullup_config(uint8_t gpio_num) {
     io_conf.pull_up_en = GPIO_PULLUP_ENABLE; // 使能上拉电阻
     gpio_config(&io_conf); // 应用配置
 }
+void cust_gpio_pulldown_config(uint8_t gpio_num) {
+    gpio_config_t io_conf;
+    io_conf.intr_type = GPIO_INTR_POSEDGE; // 设置中断触发类型为上升沿触发
+    io_conf.pin_bit_mask = 1ULL<<gpio_num; // 设置GPIO x为中断引脚
+    io_conf.mode = GPIO_MODE_INPUT; // 设置GPIO为输入模式
+    io_conf.pull_down_en = GPIO_PULLDOWN_ENABLE; // 启动下拉电阻
+    io_conf.pull_up_en = GPIO_PULLUP_DISABLE; // 禁用上拉电阻
+    gpio_config(&io_conf); // 应用配置
+}
 
 bool is_rt903_online(DEF_RT903_INFO rt903)
 {
@@ -128,7 +137,7 @@ void app_main(void)
     xTaskCreate(rt903_vibrate_task, "rt903_vibrate_task", 2048, NULL, 10, NULL);
 //通过判断rt903 chip是否online来决定对应的gpio或者事件是否触发振动task
 
-	// ussys_tp_main();
+	ussys_tp_main();
 	//filesystem_gpio_setup();
     while (true) {
         printf("Hello from app_main!\n");
