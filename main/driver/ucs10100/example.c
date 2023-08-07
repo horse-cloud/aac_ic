@@ -66,6 +66,46 @@ static ussys_cal_param_t hardcode_cal_param[] = {
 		//valid
 		true
 	},
+
+		/* sensor2 config */
+	{
+		#if USSYS_CAP_ENABLED
+		//cap sensor
+		0x10,0x60,false,
+		#endif
+		#if USSYS_CASP_ENABLED
+		//casp sensor
+		0x00,0x00,0x5E,0x32,0x06,
+		#endif
+		#if USSYS_USP_ENABLED
+		//usp sensor
+		0x05,0x06,0x5F,0x00,0x03,0xFF,0x00,0x00,0x05,0x01,
+		0x00,0xAC,0x07,0xD4,0x19,0x00,0x3A,0x0A,0x50,0x05,
+		0xFF,0x0A,
+		#endif
+		//valid
+		true
+	},
+
+		/* sensor3 config */
+	{
+		#if USSYS_CAP_ENABLED
+		//cap sensor
+		0x10,0x60,false,
+		#endif
+		#if USSYS_CASP_ENABLED
+		//casp sensor
+		0x00,0x00,0x5E,0x32,0x06,
+		#endif
+		#if USSYS_USP_ENABLED
+		//usp sensor
+		0x05,0x06,0x5F,0x00,0x03,0xFF,0x00,0x00,0x05,0x01,
+		0x00,0xAC,0x07,0xD4,0x19,0x00,0x3A,0x0A,0x50,0x05,
+		0xFF,0x0A,
+		#endif
+		//valid
+		true
+	},
 };
 #endif
 
@@ -162,7 +202,7 @@ void ussys_tp_main(void)
 	int i = 0;
 	int rc = 0;
 	
-	for (int i = 0; i < BUTTON_NUM; i++) {
+	for (i = 0; i < BUTTON_NUM; i++) {
 		ussys_tp_dev_t *dev = &ussys_tp_dev[i];
 		memset(dev, 0, sizeof(ussys_tp_dev_t));
 
@@ -185,9 +225,9 @@ void ussys_tp_main(void)
 		dev->store_cal_param	= ussys_store_cal_param;
 		ussys_tp_if_init(dev);
 	}
-#if 0	
+#if 0
 	ts = ussys_get_timestamp_us();
-	uint8_t last_status = 1;//default status  is released
+//	uint8_t last_status = 1;//default status  is released
 	while (1) {
 		#if ENABLE_IRQ_TEST
 		if (irq_fired) {
@@ -236,12 +276,12 @@ void ussys_tp_main(void)
 					cnt += sprintf(buf+cnt, "%d %s ",
 							dev->info.btn_status,
 							(dev->info.btn_status == 2) ? " pressed" : "released");
-				// 原来是release，变成了press， 或者原来是press变成了release
-					debug_info("last_status%d, btn_status:%d\r\n", last_status, dev->info.btn_status);
-				if(last_status != dev->info.btn_status){
-					last_status = dev->info.btn_status;
-					rt903x_Ram_Play_Demo();
-				}
+				// // 原来是release，变成了press， 或者原来是press变成了release
+				// 	debug_info("last_status%d, btn_status:%d\r\n", last_status, dev->info.btn_status);
+				// if(last_status != dev->info.btn_status){
+				// 	last_status = dev->info.btn_status;
+				// 	rt903x_Ram_Play_Demo();
+				// }
 				}
 
 				debug_info("%s\r\n", buf);

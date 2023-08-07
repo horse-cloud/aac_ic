@@ -31,22 +31,13 @@ def_i2c_config_t i2cConfig[] = {
 
 void ussys_tp_main(void);
 
-void cust_gpio_pullup_config(uint8_t gpio_num) {
+void cust_gpio_intr_anyedge_config(uint8_t gpio_num) {
     gpio_config_t io_conf;
-    io_conf.intr_type = GPIO_INTR_POSEDGE; // 设置中断触发类型为下降沿触发
+    io_conf.intr_type = GPIO_INTR_ANYEDGE; // 设置中断触发类型为边缘触发
     io_conf.pin_bit_mask = 1ULL<<gpio_num; // 设置GPIO x为中断引脚
     io_conf.mode = GPIO_MODE_INPUT; // 设置GPIO为输入模式
-    io_conf.pull_down_en = GPIO_PULLDOWN_DISABLE; // 禁用下拉电阻
-    io_conf.pull_up_en = GPIO_PULLUP_ENABLE; // 使能上拉电阻
-    gpio_config(&io_conf); // 应用配置
-}
-void cust_gpio_pulldown_config(uint8_t gpio_num) {
-    gpio_config_t io_conf;
-    io_conf.intr_type = GPIO_INTR_POSEDGE; // 设置中断触发类型为上升沿触发
-    io_conf.pin_bit_mask = 1ULL<<gpio_num; // 设置GPIO x为中断引脚
-    io_conf.mode = GPIO_MODE_INPUT; // 设置GPIO为输入模式
-    io_conf.pull_down_en = GPIO_PULLDOWN_ENABLE; // 启动下拉电阻
-    io_conf.pull_up_en = GPIO_PULLUP_DISABLE; // 禁用上拉电阻
+    io_conf.pull_down_en = GPIO_PULLDOWN_DISABLE; 
+    io_conf.pull_up_en = GPIO_PULLUP_ENABLE; 
     gpio_config(&io_conf); // 应用配置
 }
 
@@ -99,15 +90,14 @@ void cust_gpio_isr_handler(void* arg)
 
 void app_main(void)
 {
-
+    vTaskDelay(pdMS_TO_TICKS(1000));
 // 第二颗RT903，AD脚接48口，拉高
     gpio_reset_pin(GPIO_NUM_48);
     gpio_set_direction(GPIO_NUM_48, GPIO_MODE_OUTPUT); // 将GPIO48设置为输出模式
     gpio_set_level(GPIO_NUM_48, 1); // 将GPIO48设置为高电平
 
-// gpio6 trig I2c_0_0x5e,  gpio7  trig I2c_0_0x5f
-    cust_gpio_pullup_config(GPIO_NUM_6);
-    cust_gpio_pullup_config(GPIO_NUM_7);
+    cust_gpio_intr_anyedge_config(GPIO_NUM_6);
+    cust_gpio_intr_anyedge_config(GPIO_NUM_7);
 //注册中断服务函数，中断优先级1
     gpio_install_isr_service(1);
     //加入中断回调函数
@@ -115,6 +105,7 @@ void app_main(void)
     gpio_isr_handler_remove(GPIO_NUM_7);
     gpio_isr_handler_add(GPIO_NUM_6,cust_gpio_isr_handler,(void*)GPIO_NUM_6);   //第一个参数触发中断源，第二个回调函数，第三个传入参数
     gpio_isr_handler_add(GPIO_NUM_7,cust_gpio_isr_handler,(void*)GPIO_NUM_7);
+
 
 //i2c 初始化, 需要放到gpio操作之后，不然gpio的操作会影响i2c
     i2c_master_init(i2cConfig[0]);
@@ -136,6 +127,7 @@ void app_main(void)
     gpio_evt_queue = xQueueCreate(10, sizeof(uint8_t));
     xTaskCreate(rt903_vibrate_task, "rt903_vibrate_task", 2048, NULL, 10, NULL);
 //通过判断rt903 chip是否online来决定对应的gpio或者事件是否触发振动task
+
 
 	ussys_tp_main();
 	//filesystem_gpio_setup();

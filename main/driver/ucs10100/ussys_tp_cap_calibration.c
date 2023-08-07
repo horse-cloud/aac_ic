@@ -272,7 +272,7 @@ static void ussys_tp_cap_auto_calibration_process(ussys_tp_dev_t *dev)
 			if (full_scale > 255)
 			dev->cal_param.cap_offset_delta = 255;
 			else
-			dev->cal_param.cap_offset_delta = full_scale;
+			dev->cal_param.cap_offset_delta = full_scale * 0.3;// 修改校准值为full值的百分之30
 
 			dev->cal_param.cap_leak_cnt = optimal_lt_count;
 

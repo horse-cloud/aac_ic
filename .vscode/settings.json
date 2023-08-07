@@ -6,6 +6,9 @@
         "i2c_adapter.h": "c",
         "ics_util.h": "c",
         "rt903x_reg.h": "c",
-        "filesystem.h": "c"
+        "filesystem.h": "c",
+        "haptic_util.h": "c",
+        "haptic_drv.h": "c",
+        "rt903x.h": "c"
     }
 }

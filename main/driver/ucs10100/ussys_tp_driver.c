@@ -1300,6 +1300,9 @@ int ussys_tp_if_init(ussys_tp_dev_t *dev)
 	#if USSYS_CAP_ENABLED
 	rc += ussys_tp_cap_auto_calibration(dev);
 	#endif
+
+	//rc += ussys_tp_set_polairty(dev, 1); // Flip polarity
+
 	uint8_t int_mask = 0x01;
 	rc += ussys_tp_write_fd_reg(dev, TOUCH_POINT_FD_REG_INT_MASK, &int_mask, sizeof(int_mask));
 	#if ENABLE_REG_DUMP
