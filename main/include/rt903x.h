@@ -80,7 +80,7 @@ int32_t rt903x_play_mode(DEF_RT903_INFO i2c_config, RT903X_PLAY_MODE mode);
 int32_t rt903x_playlist_data(DEF_RT903_INFO i2c_config, const uint8_t* buf, int32_t size);
 int32_t rt903x_waveform_data(DEF_RT903_INFO i2c_config, const uint8_t* buf, int32_t size);
 
-int16_t rt903x_Ram_Play_Demo(DEF_RT903_INFO i2c_config);
+int16_t rt903x_Ram_Play_Demo(DEF_RT903_INFO i2c_config, uint8_t gain, uint8_t number, uint8_t area);
 
 int32_t rt903x_stream_play_demo(DEF_RT903_INFO i2c_config);
 

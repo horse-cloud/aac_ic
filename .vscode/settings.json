@@ -9,6 +9,7 @@
         "filesystem.h": "c",
         "haptic_util.h": "c",
         "haptic_drv.h": "c",
-        "rt903x.h": "c"
+        "rt903x.h": "c",
+        "stdbool.h": "c"
     }
 }

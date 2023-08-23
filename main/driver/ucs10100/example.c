@@ -35,7 +35,7 @@ static ussys_cal_param_t hardcode_cal_param[] = {
 		#endif
 		#if USSYS_CASP_ENABLED
 		//casp sensor
-		0x00,0x00,0x5E,0x32,0x01,
+		0x00,0x00,0x5F,0x32,0x01,
 		#endif
 		#if USSYS_USP_ENABLED
 		//usp sensor
@@ -47,7 +47,7 @@ static ussys_cal_param_t hardcode_cal_param[] = {
 		true
 	},
 	
-	/* sensor1 config */
+ 	/* sensor1 config */
 	{
 		#if USSYS_CAP_ENABLED
 		//cap sensor
@@ -55,7 +55,7 @@ static ussys_cal_param_t hardcode_cal_param[] = {
 		#endif
 		#if USSYS_CASP_ENABLED
 		//casp sensor
-		0x00,0x00,0x5E,0x32,0x06,
+		0x00,0x00,0x5F,0x32,0x06,
 		#endif
 		#if USSYS_USP_ENABLED
 		//usp sensor
@@ -75,7 +75,7 @@ static ussys_cal_param_t hardcode_cal_param[] = {
 		#endif
 		#if USSYS_CASP_ENABLED
 		//casp sensor
-		0x00,0x00,0x5E,0x32,0x06,
+		0x00,0x00,0x5F,0x32,0x06,
 		#endif
 		#if USSYS_USP_ENABLED
 		//usp sensor
@@ -95,7 +95,7 @@ static ussys_cal_param_t hardcode_cal_param[] = {
 		#endif
 		#if USSYS_CASP_ENABLED
 		//casp sensor
-		0x00,0x00,0x5E,0x32,0x06,
+		0x00,0x00,0x5F,0x32,0x06,
 		#endif
 		#if USSYS_USP_ENABLED
 		//usp sensor
