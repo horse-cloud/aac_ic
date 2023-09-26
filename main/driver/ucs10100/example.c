@@ -16,7 +16,8 @@
 #define ENABLE_HARDCODE_CAL_PARAM	(1)
 #define ENABLE_IRQ_TEST				(0)
 
-#define I2C_MASTER_NUM              0                          /*!< I2C master i2c port number, the number of i2c peripheral interfaces available will depend on the chip */
+#define I2C_MASTER_NUM0              0          /*!< I2C master i2c port number, the number of i2c peripheral interfaces available will depend on the chip */
+#define I2C_MASTER_NUM1              1          /*!< I2C master i2c port number, the number of i2c peripheral interfaces available will depend on the chip */
 #define ACK_CHECK_EN 0x1            /*!< I2C master will check ack from slave*/
 #define WRITE_BIT I2C_MASTER_WRITE  /*!< I2C master write */
 #define READ_BIT I2C_MASTER_READ    /*!< I2C master read */
@@ -24,9 +25,15 @@
 #define ACK_VAL 0x0                 /*!< I2C ack value */
 #define NACK_VAL 0x1                /*!< I2C nack value */
 
+uint8_t I2C_MASTER_NUM = I2C_MASTER_NUM0;
+
+void set_i2c_master_num(uint8_t num){
+	I2C_MASTER_NUM = num;
+}
 
 #if ENABLE_HARDCODE_CAL_PARAM
 static ussys_cal_param_t hardcode_cal_param[] = {
+	//非悬浮，0x5f, 0x96(0x32改成了0x96)
 	/* sensor0 config */
 	{
 		#if USSYS_CAP_ENABLED
@@ -35,7 +42,8 @@ static ussys_cal_param_t hardcode_cal_param[] = {
 		#endif
 		#if USSYS_CASP_ENABLED
 		//casp sensor
-		0x00,0x00,0x5F,0x32,0x01,
+		//因非悬浮区域右侧改为音效，压力阈值降低，从0x96改成0x10
+		0x00,0x00,0x5F, 0x32/*0x96*/,0x01,
 		#endif
 		#if USSYS_USP_ENABLED
 		//usp sensor
@@ -55,7 +63,7 @@ static ussys_cal_param_t hardcode_cal_param[] = {
 		#endif
 		#if USSYS_CASP_ENABLED
 		//casp sensor
-		0x00,0x00,0x5F,0x32,0x06,
+		0x00,0x00,0x5F,0x20/*0x96*/,0x06,
 		#endif
 		#if USSYS_USP_ENABLED
 		//usp sensor
@@ -75,7 +83,7 @@ static ussys_cal_param_t hardcode_cal_param[] = {
 		#endif
 		#if USSYS_CASP_ENABLED
 		//casp sensor
-		0x00,0x00,0x5F,0x32,0x06,
+		0x00,0x00,0x5F,0x40,0x06,
 		#endif
 		#if USSYS_USP_ENABLED
 		//usp sensor
@@ -95,7 +103,90 @@ static ussys_cal_param_t hardcode_cal_param[] = {
 		#endif
 		#if USSYS_CASP_ENABLED
 		//casp sensor
-		0x00,0x00,0x5F,0x32,0x06,
+		0x00,0x00,0x5F,0x40,0x06,
+		#endif
+		#if USSYS_USP_ENABLED
+		//usp sensor
+		0x05,0x06,0x5F,0x00,0x03,0xFF,0x00,0x00,0x05,0x01,
+		0x00,0xAC,0x07,0xD4,0x19,0x00,0x3A,0x0A,0x50,0x05,
+		0xFF,0x0A,
+		#endif
+		//valid
+		true
+	},
+};
+//悬浮区域，i2c 1上的模组
+static ussys_cal_param_t hardcode_cal_param1[] = {
+	//悬浮区域
+	/* sensor0 config */
+	{
+		#if USSYS_CAP_ENABLED
+		//cap sensor
+		0x10,0x60,false,
+		#endif
+		#if USSYS_CASP_ENABLED
+		//casp sensor
+		0x00,0x00,0x5F,0x09/*0x10*/,0x01,
+		#endif
+		#if USSYS_USP_ENABLED
+		//usp sensor
+		0x05,0x06,0x5F,0x00,0x03,0xFF,0x00,0x00,0x05,0x01,
+		0x00,0xAC,0x07,0xD4,0x19,0x00,0x3A,0x0A,0x50,0x05,
+		0xFF,0x0A,
+		#endif
+		//valid
+		true
+	},
+	
+ 	/* sensor1 config */
+	{
+		#if USSYS_CAP_ENABLED
+		//cap sensor
+		0x10,0x60,false,
+		#endif
+		#if USSYS_CASP_ENABLED
+		//casp sensor
+		0x00,0x00,0x5F,0x02/*0x32*/,0x06,
+		#endif
+		#if USSYS_USP_ENABLED
+		//usp sensor
+		0x05,0x06,0x5F,0x00,0x03,0xFF,0x00,0x00,0x05,0x01,
+		0x00,0xAC,0x07,0xD4,0x19,0x00,0x3A,0x0A,0x50,0x05,
+		0xFF,0x0A,
+		#endif
+		//valid
+		true
+	},
+
+		/* sensor2 config */
+	{
+		#if USSYS_CAP_ENABLED
+		//cap sensor
+		0x10,0x60,false,
+		#endif
+		#if USSYS_CASP_ENABLED
+		//casp sensor
+		0x00,0x00,0x5F,0x15/*0x32*/,0x06,
+		#endif
+		#if USSYS_USP_ENABLED
+		//usp sensor
+		0x05,0x06,0x5F,0x00,0x03,0xFF,0x00,0x00,0x05,0x01,
+		0x00,0xAC,0x07,0xD4,0x19,0x00,0x3A,0x0A,0x50,0x05,
+		0xFF,0x0A,
+		#endif
+		//valid
+		true
+	},
+
+		/* sensor3 config */
+	{
+		#if USSYS_CAP_ENABLED
+		//cap sensor
+		0x10,0x60,false,
+		#endif
+		#if USSYS_CASP_ENABLED
+		//casp sensor
+		0x00,0x00,0x5F,0x15/*0x32*/,0x06,
 		#endif
 		#if USSYS_USP_ENABLED
 		//usp sensor
@@ -172,8 +263,13 @@ static uint64_t ussys_get_timestamp_us(void)
 int ussys_load_cal_param(ussys_tp_dev_t *dev)
 {
 #if ENABLE_HARDCODE_CAL_PARAM
+
 	if (dev->dev_idx < ARRAY_SIZE(hardcode_cal_param)) {
-		memcpy(&dev->cal_param, &hardcode_cal_param[dev->dev_idx], sizeof(ussys_cal_param_t));
+			if(I2C_MASTER_NUM0 == I2C_MASTER_NUM){
+				memcpy(&dev->cal_param, &hardcode_cal_param[dev->dev_idx], sizeof(ussys_cal_param_t));
+			}else{
+				memcpy(&dev->cal_param, &hardcode_cal_param1[dev->dev_idx], sizeof(ussys_cal_param_t));
+			}
 		return 0;
 	} else {
 		debug_info("hardcode_cal_param array size is too small!\r\n");
@@ -211,7 +307,7 @@ void ussys_tp_main(void)
 			dev->i2c_addr = 0x27;
 		} 
 		else if (i == 1) {
-			dev->i2c_addr = 0x2F;
+			dev->i2c_addr = 0x2F;//0x2F;
 		}else if (i == 2){
 			dev->i2c_addr = 0x37;
 		}else if (i == 3){

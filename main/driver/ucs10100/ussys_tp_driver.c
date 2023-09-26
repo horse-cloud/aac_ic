@@ -814,14 +814,13 @@ static int ussys_tp_push_algo1st_ths(ussys_tp_dev_t *dev, ussys_algo1st_ths_t *a
 	debug_info("dev%d(%#X) set usp noise rms 0x%4x=0x%02x\r\n", dev->dev_idx, dev->i2c_addr, algo1st_ths.usp.s.NoiseRMS, dev->cal_param.algo_usp_noise_rms);
 	#endif
 	
+	//修改成两个通道，为解决正常情况下阈值过低问题
+	if(dev->i2c_addr != 1){
+		uint8_t reg_0x1837_inital_value = 0x19;//双通道参数，default是0x1F
+		rc += ussys_tp_write_mem(dev, 0x1837, &reg_0x1837_inital_value, 1);
+	}
 	/* apply algo1st ths */
 	rc += ussys_tp_push_algo1st_ths(dev, &algo1st_ths);
-    
-	//修改成两个通道，为解决正常情况下阈值过低问题
-	// if(dev->i2c_addr != 1){
-	// 	uint8_t reg_0x1837_inital_value = 0x19;//双通道参数，default是0x1F
-	// 	rc += ussys_tp_write_mem(dev, 0x1837, &reg_0x1837_inital_value, 1);
-	// }
 
     rc += ussys_tp_put_to_hold(dev, false);
     

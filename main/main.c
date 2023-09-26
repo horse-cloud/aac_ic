@@ -13,10 +13,12 @@
 #include "esp_err.h"
 #include <i2c_adapter.h>
 #include "filesystem.h"
+#include "ledcontrol.h"
 
 #define RT903_CHIP_NUMBER_MAX 4
 static QueueHandle_t gpio_evt_queue = NULL;
-static uint8_t number = 0;
+static int8_t number = 0;
+static int8_t gain_value = 0x0;
 
 DEF_RT903_INFO RT903_INFO[RT903_CHIP_NUMBER_MAX] = 
 {
@@ -29,8 +31,10 @@ def_i2c_config_t i2cConfig[] = {
     {I2C_MASTER_NUM0, I2C_MASTER_0_SDA_IO, I2C_MASTER_0_SCL_IO, I2C_MASTER_FREQ_HZ},
     {I2C_MASTER_NUM1, I2C_MASTER_1_SDA_IO, I2C_MASTER_1_SCL_IO, I2C_MASTER_FREQ_HZ},
 };
-uint16_t gain_play_list[]= {0x80, 0x80, 0x80, 0x80};
+uint16_t gain_play_list[]= {0x40, 0x55, 0x80};
+int8_t gain_play_list_len = sizeof(gain_play_list)/sizeof(gain_play_list[0]);
 
+void set_i2c_master_num(uint8_t num);
 void ussys_tp_main(void);
 
 void cust_gpio_intr_anyedge_config(uint8_t gpio_num) {
@@ -58,6 +62,12 @@ bool is_rt903_online(DEF_RT903_INFO rt903)
     return rt903.is_online;
 }
 
+void prepare_ram_data(int j){
+    rt903x_Ram_prepare(RT903_INFO[0], gain_play_list[gain_value], j, 0);
+    rt903x_Ram_prepare(RT903_INFO[1], gain_play_list[gain_value], j, 1);    
+    rt903x_Ram_prepare(RT903_INFO[3], gain_play_list[gain_value], j, 2);   
+}
+
 void rt903_vibrate_task(void* arg) {
     int i =0;
     for (;;) {
@@ -66,21 +76,45 @@ void rt903_vibrate_task(void* arg) {
         printf("rt903_vibrate_task enter, i:%d\n", i++);
         if(xQueueReceive(gpio_evt_queue, &gpio_num, portMAX_DELAY) == pdPASS ){
             int level = gpio_get_level(gpio_num);
-            int j = number % 4;
+            int j = number % EFFECT_NUMBER_MAX;
             printf("rt903_vibrate_task enter, gpio:%d, level:%d, effect number is :%d\n", gpio_num, level, j);
             switch (gpio_num)
             {
                 case GPIO_NUM_6:
-                    rt903x_Ram_Play_Demo(RT903_INFO[0], gain_play_list[j], j, 0);
+                   // if(level == 0){// 定义此触发为播放音效，播放音效时，只在按下时播放，抬起时不播放
+                    prepare_ram_data(j);
+                    rt903x_Ram_play(RT903_INFO[0]);
+                  //  }
                     break;
-                case GPIO_NUM_7:    
-                    rt903x_Ram_Play_Demo(RT903_INFO[1], gain_play_list[j], j, 1);    
+                case GPIO_NUM_7:
+                    prepare_ram_data(j);
+                    rt903x_Ram_play(RT903_INFO[1]);    
+                    break;
+                case GPIO_NUM_8:
+                    prepare_ram_data(j);
+                    rt903x_Ram_play(RT903_INFO[3]);    
                     break;
                 case GPIO_NUM_10:
+                case GPIO_NUM_14:
                     if(0 == level){
-                        number++;
-                        if(number > 3) number = 0;
-                        printf("number:%d\n", number);
+                        vTaskDelay(10 / portTICK_PERIOD_MS);//消抖，隔10ms再获取状态
+                        if(0 == gpio_get_level(gpio_num)){
+                            gain_value++;
+                            if(gain_value >= gain_play_list_len) gain_value = 0;
+                            rt903x_stream_play_demo(RT903_INFO[0]);//临时使用音效提醒切换成功
+                            printf("gain_value++:%d\n", gain_value);
+                        }
+                    }
+                    break;
+                case GPIO_NUM_35:
+                    if(0 == level){
+                        vTaskDelay(10 / portTICK_PERIOD_MS);//消抖，隔10ms再获取状态
+                        if(0 == gpio_get_level(gpio_num)){
+                            number++;
+                            if(number >= EFFECT_NUMBER_MAX) number = 0;
+                            rt903x_stream_play_demo(RT903_INFO[0]);//临时使用音效提醒切换成功
+                            printf("number--:%d\n", number);
+                        }
                     }
                     break;
                 default:
@@ -102,7 +136,10 @@ void cust_gpio_isr_handler(void* arg)
     {
         case GPIO_NUM_6:
         case GPIO_NUM_7:
+        case GPIO_NUM_8:
         case GPIO_NUM_10:
+        case GPIO_NUM_35:
+        case GPIO_NUM_14:
             xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
             break;
         default:
@@ -114,6 +151,7 @@ void cust_gpio_isr_handler(void* arg)
 void app_main(void)
 {
     vTaskDelay(pdMS_TO_TICKS(1000));
+
 // 第二颗RT903，AD脚接48口，拉高
     gpio_reset_pin(GPIO_NUM_48);
     gpio_set_direction(GPIO_NUM_48, GPIO_MODE_OUTPUT); // 将GPIO48设置为输出模式
@@ -121,16 +159,26 @@ void app_main(void)
 
     cust_gpio_intr_anyedge_config(GPIO_NUM_6);
     cust_gpio_intr_anyedge_config(GPIO_NUM_7);
+    cust_gpio_intr_anyedge_config(GPIO_NUM_8);
     cust_gpio_intr_negedge_config(GPIO_NUM_10);
+    cust_gpio_intr_negedge_config(GPIO_NUM_35);
+    cust_gpio_intr_negedge_config(GPIO_NUM_14);
 //注册中断服务函数，中断优先级1
     gpio_install_isr_service(1);
     //加入中断回调函数
     gpio_isr_handler_remove(GPIO_NUM_6);
     gpio_isr_handler_remove(GPIO_NUM_7);
+    gpio_isr_handler_remove(GPIO_NUM_8);
     gpio_isr_handler_remove(GPIO_NUM_10);
+    gpio_isr_handler_remove(GPIO_NUM_35);
+    gpio_isr_handler_remove(GPIO_NUM_45);
     gpio_isr_handler_add(GPIO_NUM_6,cust_gpio_isr_handler,(void*)GPIO_NUM_6);   //第一个参数触发中断源，第二个回调函数，第三个传入参数
     gpio_isr_handler_add(GPIO_NUM_7,cust_gpio_isr_handler,(void*)GPIO_NUM_7);
+    gpio_isr_handler_add(GPIO_NUM_8,cust_gpio_isr_handler,(void*)GPIO_NUM_8);
     gpio_isr_handler_add(GPIO_NUM_10,cust_gpio_isr_handler,(void*)GPIO_NUM_10);
+    gpio_isr_handler_add(GPIO_NUM_35,cust_gpio_isr_handler,(void*)GPIO_NUM_35);
+    gpio_isr_handler_add(GPIO_NUM_14,cust_gpio_isr_handler,(void*)GPIO_NUM_14);
+
 
 
 //i2c 初始化, 需要放到gpio操作之后，不然gpio的操作会影响i2c
@@ -148,14 +196,24 @@ void app_main(void)
             RT903_INFO[i].is_online = false;
         }
     }
+    prepare_ram_data(0);
 
 //创建振动处理任务，在gpio触发时处理cust_gpio_isr_handler中发送的消息
     gpio_evt_queue = xQueueCreate(10, sizeof(uint8_t));
     xTaskCreate(rt903_vibrate_task, "rt903_vibrate_task", 2048, NULL, 10, NULL);
+
+
 //通过判断rt903 chip是否online来决定对应的gpio或者事件是否触发振动task
 
+     set_i2c_master_num(I2C_MASTER_NUM0);
+	 ussys_tp_main();
+    set_i2c_master_num(I2C_MASTER_NUM1);
+    ussys_tp_main();
 
-	ussys_tp_main();
+//ledc 初始化
+    ledc_init();
+    //灯光控制
+    xTaskCreate(aac_ledc_task, "aac_ledc_task", 2048, NULL, 10, NULL);
 	//filesystem_gpio_setup();
     while (true) {
         printf("Hello from app_main!\n");

@@ -1,7 +1,11 @@
 #include <stdint.h>
 #include <stdbool.h>
 #define    CHIP_ID    0x6B
+#define TRUE 1
+#define FALSE 0
 
+#define EFFECT_NUMBER_MAX 4
+#define SOUND_EFFECT_SUPPORT FALSE   
 #pragma pack(1)
 struct RAM_PARAM
 {
@@ -80,7 +84,8 @@ int32_t rt903x_play_mode(DEF_RT903_INFO i2c_config, RT903X_PLAY_MODE mode);
 int32_t rt903x_playlist_data(DEF_RT903_INFO i2c_config, const uint8_t* buf, int32_t size);
 int32_t rt903x_waveform_data(DEF_RT903_INFO i2c_config, const uint8_t* buf, int32_t size);
 
-int16_t rt903x_Ram_Play_Demo(DEF_RT903_INFO i2c_config, uint8_t gain, uint8_t number, uint8_t area);
+int16_t rt903x_Ram_prepare(DEF_RT903_INFO i2c_config, uint8_t gain, uint8_t number, uint8_t area);
+int16_t rt903x_Ram_play(DEF_RT903_INFO i2c_config);
 
 int32_t rt903x_stream_play_demo(DEF_RT903_INFO i2c_config);
 
