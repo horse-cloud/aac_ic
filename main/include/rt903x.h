@@ -1,10 +1,12 @@
+#ifndef __RT903X_H
+#define __RT903X_H
 #include <stdint.h>
 #include <stdbool.h>
 #define    CHIP_ID    0x6B
 #define TRUE 1
 #define FALSE 0
 
-#define EFFECT_NUMBER_MAX 4
+#define EFFECT_NUMBER_MAX 2//4
 #define SOUND_EFFECT_SUPPORT FALSE   
 #pragma pack(1)
 struct RAM_PARAM
@@ -90,3 +92,5 @@ int16_t rt903x_Ram_play(DEF_RT903_INFO i2c_config);
 int32_t rt903x_stream_play_demo(DEF_RT903_INFO i2c_config);
 
 extern struct RT903X_CONFIG rt903x_config;
+
+#endif // __RT903X

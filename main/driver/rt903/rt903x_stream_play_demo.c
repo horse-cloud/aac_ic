@@ -4,7 +4,7 @@
 #include "ics_util.h"
 #include "string.h"
 #include <stdint.h>
-
+/*
 const int8_t stream_data[] =
 {
  0,-3,-6,-2,0,-28,-24,58,51,-38,-89,-44,29,43,24,3,-21,-45,-33,6,32,26,0,-25,-31,-16,10,29,21,-6,
@@ -32,9 +32,17 @@ const int8_t stream_data[] =
  -1,-2,-1,-1,-1,-1,-1,-1,-1,-1,0,-1,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,0,1,0,0,0,0,1,0,
  0,0,0,0,0,0,0,0,0,-1,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,
  -1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-};
+};*/
+static const int8_t sin_2k_effect[]=
+{0,47,-97,-4,127,-127,-1,127,-127,0,127,-127,0,127,-127,0,127,-127,0,127,-127,0,127,-127,
+0,127,-127,0,127,-127,0,127,-127,-1,127,-127,-1,127,-127,-1,127,-127,-1,127,-127,0,127,-127,0,127,-127,0,127,-127,
+0,127,-127,0,127,-127,0,127,-127,0,127,-127,0,127,-127,0,127,-127,0,127,-127,0,127,-127,0,127,-127,0,127,-127,0,127,
+-127,0,127,-127,0,127,-127,0,127,-127,-1,127,-127,-1,127,-127,-1,127,-127,0,127,-127,0,127,-127,0,127,-127,0,127,
+-127,0,127,-127,0,127,-127,0,127,-127,0,127,-127,0,127,-127,0,127,-127,0,127,-127,0,127,-127,0,127,-127,0,122,-110,
+-1,55,-26,-2,0};
 
-#define STREAM_DATA_LEN        sizeof(stream_data)
+
+#define STREAM_DATA_LEN        sizeof(sin_2k_effect)
 uint8_t stream_demo_flag = 0;
 uint32_t data_demo_index = 0;
 
@@ -63,7 +71,7 @@ int32_t stream_play_demo_proc(DEF_RT903_INFO i2c_config)
             int32_t stream_size = ((rt903x_config.ram_param.ListBaseAddrH << 8) | rt903x_config.ram_param.ListBaseAddrL)
                 - ((rt903x_config.ram_param.FifoAEH << 8) | rt903x_config.ram_param.FifoAEL);
             stream_size = min(STREAM_DATA_LEN - data_demo_index, stream_size);
-            res = rt903x_stream_data(i2c_config, (const uint8_t*)stream_data + data_demo_index, stream_size);
+            res = rt903x_stream_data(i2c_config, (const uint8_t*)sin_2k_effect + data_demo_index, stream_size);
             CHECK_ERROR_RETURN(res);
             data_demo_index += stream_size;
             if (data_demo_index >= STREAM_DATA_LEN)
@@ -94,12 +102,12 @@ int32_t rt903x_stream_play_demo(DEF_RT903_INFO i2c_config)
     CHECK_ERROR_RETURN(res);
     int32_t stream_size = (rt903x_config.ram_param.ListBaseAddrH << 8) | rt903x_config.ram_param.ListBaseAddrL;
     stream_size = min(STREAM_DATA_LEN, stream_size);
-    res = rt903x_stream_data(i2c_config, (const uint8_t*)stream_data, stream_size);
+    res = rt903x_stream_data(i2c_config, (const uint8_t*)sin_2k_effect, stream_size);
     CHECK_ERROR_RETURN(res);
     data_demo_index += stream_size;
     res = stream_play_demo_proc(i2c_config);
     CHECK_ERROR_RETURN(res);
-		data_demo_index = 0;
+	data_demo_index = 0;
 	
     return 0;
 }

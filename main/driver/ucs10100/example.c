@@ -43,7 +43,7 @@ static ussys_cal_param_t hardcode_cal_param[] = {
 		#if USSYS_CASP_ENABLED
 		//casp sensor
 		//因非悬浮区域右侧改为音效，压力阈值降低，从0x96改成0x10
-		0x00,0x00,0x5F, 0x32/*0x96*/,0x01,
+		0x00,0x00,0x5F, 0x50/*0x96*/,0x01,
 		#endif
 		#if USSYS_USP_ENABLED
 		//usp sensor
@@ -63,7 +63,7 @@ static ussys_cal_param_t hardcode_cal_param[] = {
 		#endif
 		#if USSYS_CASP_ENABLED
 		//casp sensor
-		0x00,0x00,0x5F,0x20/*0x96*/,0x06,
+		0x00,0x00,0x5F,0x55/*0x96*/,0x06,
 		#endif
 		#if USSYS_USP_ENABLED
 		//usp sensor
@@ -83,7 +83,7 @@ static ussys_cal_param_t hardcode_cal_param[] = {
 		#endif
 		#if USSYS_CASP_ENABLED
 		//casp sensor
-		0x00,0x00,0x5F,0x40,0x06,
+		0x00,0x00,0x5F,0x1,0x06,
 		#endif
 		#if USSYS_USP_ENABLED
 		//usp sensor
@@ -103,7 +103,7 @@ static ussys_cal_param_t hardcode_cal_param[] = {
 		#endif
 		#if USSYS_CASP_ENABLED
 		//casp sensor
-		0x00,0x00,0x5F,0x40,0x06,
+		0x00,0x00,0x5F,0x1,0x06,
 		#endif
 		#if USSYS_USP_ENABLED
 		//usp sensor
@@ -126,7 +126,7 @@ static ussys_cal_param_t hardcode_cal_param1[] = {
 		#endif
 		#if USSYS_CASP_ENABLED
 		//casp sensor
-		0x00,0x00,0x5F,0x09/*0x10*/,0x01,
+		0x00,0x00,0x5F,0x10/*0x10*/,0x01,
 		#endif
 		#if USSYS_USP_ENABLED
 		//usp sensor
@@ -146,7 +146,7 @@ static ussys_cal_param_t hardcode_cal_param1[] = {
 		#endif
 		#if USSYS_CASP_ENABLED
 		//casp sensor
-		0x00,0x00,0x5F,0x02/*0x32*/,0x06,
+		0x00,0x00,0x5F,0x25/*0x32*/,0x06,
 		#endif
 		#if USSYS_USP_ENABLED
 		//usp sensor
@@ -166,7 +166,7 @@ static ussys_cal_param_t hardcode_cal_param1[] = {
 		#endif
 		#if USSYS_CASP_ENABLED
 		//casp sensor
-		0x00,0x00,0x5F,0x15/*0x32*/,0x06,
+		0x00,0x00,0x5F,0x28/*0x32*/,0x06,
 		#endif
 		#if USSYS_USP_ENABLED
 		//usp sensor
@@ -186,7 +186,7 @@ static ussys_cal_param_t hardcode_cal_param1[] = {
 		#endif
 		#if USSYS_CASP_ENABLED
 		//casp sensor
-		0x00,0x00,0x5F,0x15/*0x32*/,0x06,
+		0x00,0x00,0x5F,0x18/*0x32*/,0x06,
 		#endif
 		#if USSYS_USP_ENABLED
 		//usp sensor

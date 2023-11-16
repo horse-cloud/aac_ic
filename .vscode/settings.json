@@ -1,6 +1,6 @@
 {
     "idf.adapterTargetName": "esp32s3",
-    "idf.portWin": "COM16",
+    "idf.portWin": "COM26",
     "idf.flashType": "UART",
     "files.associations": {
         "i2c_adapter.h": "c",
@@ -10,6 +10,8 @@
         "haptic_util.h": "c",
         "haptic_drv.h": "c",
         "rt903x.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "stdint.h": "c",
+        "led_strip_encoder.h": "c"
     }
 }

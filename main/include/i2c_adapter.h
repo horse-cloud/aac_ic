@@ -52,17 +52,17 @@
 //
 #define I2C_MASTER_NUM0              0          /*!< I2C master i2c port number, the number of i2c peripheral interfaces available will depend on the chip */
 #define I2C_MASTER_NUM1              1          /*!< I2C master i2c port number, the number of i2c peripheral interfaces available will depend on the chip */
-#define I2C_MASTER_0_SCL_IO           CONFIG_I2C_MASTER_0_SCL  /*!< GPIO number used for I2C master clock */
-#define I2C_MASTER_0_SDA_IO           CONFIG_I2C_MASTER_0_SDA  /*!< GPIO number used for I2C master data  */
-#define I2C_MASTER_1_SCL_IO           CONFIG_I2C_MASTER_1_SCL  /*!< GPIO number used for I2C master clock */
-#define I2C_MASTER_1_SDA_IO           CONFIG_I2C_MASTER_1_SDA  /*!< GPIO number used for I2C master data  */
+#define I2C_MASTER_0_SCL_IO           GPIO_NUM_38//CONFIG_I2C_MASTER_0_SCL  /*!< GPIO number used for I2C master clock */
+#define I2C_MASTER_0_SDA_IO           GPIO_NUM_37//CONFIG_I2C_MASTER_0_SDA  /*!< GPIO number used for I2C master data  */
+#define I2C_MASTER_1_SCL_IO           GPIO_NUM_36//CONFIG_I2C_MASTER_1_SCL  /*!< GPIO number used for I2C master clock */
+#define I2C_MASTER_1_SDA_IO           GPIO_NUM_35//CONFIG_I2C_MASTER_1_SDA  /*!< GPIO number used for I2C master data  */
 #define I2C_MASTER_NUM              0                          
 #define I2C_MASTER_FREQ_HZ          400000                     /*!< I2C master clock frequency */
 #define I2C_MASTER_TX_BUF_DISABLE   0                          /*!< I2C master doesn't need buffer */
 #define I2C_MASTER_RX_BUF_DISABLE   0                          /*!< I2C master doesn't need buffer */
 #define I2C_MASTER_TIMEOUT_MS       1000
-#define I2C_0_ADDRESS			(0x5E)
-#define I2C_1_ADDRESS			(0x5F)
+#define I2C_0_ADDRESS			(0x5F)
+#define I2C_1_ADDRESS			(0x5E)
 //#define I2C_TIMING    0x00401040//0x00901954
 //#define I2C_TIMING    0x20301850//300k
 #define I2C_TIMING    0x00401032 //1m
@@ -76,6 +76,39 @@
 #define I2C_MASTER_RX_BUF_DISABLE   0                          /*!< I2C master doesn't need buffer */
 #define I2C_MASTER_TIMEOUT_MS       1000
 
+#define INPUT_INT1    GPIO_NUM_1
+#define INPUT_INT2    GPIO_NUM_2
+#define INPUT_INT3    GPIO_NUM_6
+#define INPUT_INT4    GPIO_NUM_45
+#define INPUT_INT5    GPIO_NUM_48
+#define INPUT_INT6    GPIO_NUM_47
+#define INPUT_INT7    GPIO_NUM_21
+#define INPUT_INT8    GPIO_NUM_14
+enum INT_NUMBER {
+    INT1,
+    INT2,
+    INT3,
+    INT4,
+    INT5,
+    INT6,
+    INT7,
+    INT8,
+    INT_DATA_MAX
+};
+
+#define SMART_SURFACE_SWITCH1    GPIO_NUM_18
+#define SMART_SURFACE_SWITCH2    GPIO_NUM_8
+#define SMART_SURFACE_SWITCH3    GPIO_NUM_3
+#define SMART_SURFACE_SWITCH4    GPIO_NUM_46
+#define SMART_SURFACE_SWITCH5    GPIO_NUM_9
+enum SWITCH_NUMBER {
+    SWITCH1,
+    SWITCH2,
+    SWITCH3,
+    SWITCH4,
+    SWITCH5,
+    SWITCH_MAX,
+};
 
 typedef struct {
     uint8_t i2c_master_num;
