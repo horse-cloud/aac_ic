@@ -57,8 +57,8 @@ const uint8_t SMART_SURFACE_SWITCH[] = {
 };
 
 //保证hard_gain_play_list和soft_gain_play_list的长度一致
-uint16_t hard_gain_play_list[]= {0x20, 0x55, 0x80};
-uint16_t soft_gain_play_list[]= {0x55, 0x65, 0x80};
+uint16_t hard_gain_play_list[]= {0x40, 0x50,0x65, 0x80};
+uint16_t soft_gain_play_list[]= {0x55, 0x65,0x70, 0x80};
 int8_t gain_play_list_len = sizeof(hard_gain_play_list)/sizeof(hard_gain_play_list[0]);
 
 void set_i2c_master_num(uint8_t num);
@@ -98,7 +98,7 @@ void rt903_vibrate_task(void* arg) {
         printf("rt903_vibrate_task enter, i:%d\n", i++);
         if(xQueueReceive(gpio_int_evt_queue, &gpio_num, portMAX_DELAY) == pdPASS ){
             int level = gpio_get_level(gpio_num);
-            vTaskDelay(10 / portTICK_PERIOD_MS);//消抖，隔10ms再获取状态
+            vTaskDelay(15 / portTICK_PERIOD_MS);//消抖，隔10ms再获取状态
             if(level == gpio_get_level(gpio_num)){
                 int j = number % EFFECT_NUMBER_MAX;
                 printf("rt903_vibrate_task enter, gpio:%d, level:%d, effect number is :%d\n", gpio_num, level, j);
@@ -166,7 +166,7 @@ void rt903_vibrate_task(void* arg) {
                 }
             }
             // 延时50ms，在延时期间的消息清空，不予响应
-            vTaskDelay(pdMS_TO_TICKS(50));
+            vTaskDelay(pdMS_TO_TICKS(45));
             xQueueReset(gpio_int_evt_queue);
         }
     }
@@ -188,10 +188,12 @@ void smart_surface_switch_dispatch(){
                         case SMART_SURFACE_SWITCH1://切换效果
                             number++;
                             if(number >= EFFECT_NUMBER_MAX) number = 0;
+                            rt903x_stream_play_effect(RT903_INFO[0],number);//临时使用音效提醒切换成功
                             break;
                         case SMART_SURFACE_SWITCH2://切gain值
                             gain_value++;
                             if(gain_value >= gain_play_list_len) gain_value = 0;
+                            rt903x_stream_play_effect(RT903_INFO[0],gain_value);//临时使用音效提醒切换成功
                             break;
                         case SMART_SURFACE_SWITCH3:
                         case SMART_SURFACE_SWITCH4:
@@ -200,7 +202,7 @@ void smart_surface_switch_dispatch(){
                         default:
                             break;
                     }
-                    rt903x_stream_play_demo(RT903_INFO[0]);//临时使用音效提醒切换成功
+                    
                 }
             }
 
@@ -309,7 +311,7 @@ void app_main(void)
 	//filesystem_gpio_setup();
 
 //点亮板载灯
- //   rgb_control();
+    rgb_control();
     while (true) {
         printf("Hello from app_main!\n");
         vTaskDelay(portMAX_DELAY);

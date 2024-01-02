@@ -6,7 +6,7 @@
 #define TRUE 1
 #define FALSE 0
 
-#define EFFECT_NUMBER_MAX 2//4
+#define EFFECT_NUMBER_MAX 3
 #define SOUND_EFFECT_SUPPORT FALSE   
 #pragma pack(1)
 struct RAM_PARAM
@@ -21,7 +21,6 @@ struct RAM_PARAM
     uint8_t FifoAFH;
 };
 #pragma pack()
-
 
 typedef struct {
     bool is_online;       /*!< record chip is online or not>*/
@@ -89,7 +88,8 @@ int32_t rt903x_waveform_data(DEF_RT903_INFO i2c_config, const uint8_t* buf, int3
 int16_t rt903x_Ram_prepare(DEF_RT903_INFO i2c_config, uint8_t gain, uint8_t number, uint8_t area);
 int16_t rt903x_Ram_play(DEF_RT903_INFO i2c_config);
 
-int32_t rt903x_stream_play_demo(DEF_RT903_INFO i2c_config);
+int32_t rt903x_stream_play_demo(DEF_RT903_INFO i2c_config, const uint8_t *stream_data, uint32_t stream_data_len);
+int rt903x_stream_play_effect(DEF_RT903_INFO i2c_config, uint8_t index);
 
 extern struct RT903X_CONFIG rt903x_config;
 

@@ -1,6 +1,6 @@
 {
     "idf.adapterTargetName": "esp32s3",
-    "idf.portWin": "COM26",
+    "idf.portWin": "COM24",
     "idf.flashType": "UART",
     "files.associations": {
         "i2c_adapter.h": "c",

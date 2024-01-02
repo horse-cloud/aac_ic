@@ -29,14 +29,14 @@ static const touch_pad_t channel_array[TOUCH_SLIDER_CHANNEL_NUM] = { //Touch sli
  * physical characteristics, if you want to decrease or increase the detection sensitivity, keep the ratio of those channels the same.
  */
 static const float channel_sens_array[TOUCH_SLIDER_CHANNEL_NUM] = {  //Touch slider channels sensitivity array
-    0.061F,
-    0.061F,
-    0.061F,
-    0.061F,
-    0.061F,
-    0.061F,
-    0.061F,
-    0.061F,
+    0.310F,
+    0.310F,
+    0.310F,
+    0.310F,
+    0.310F,
+    0.310F,
+    0.310F,
+    0.310F,
 };
 // for test 
 //just for get touch pad raw data
@@ -45,23 +45,23 @@ static void get_raw_data_handler_task(void *arg){
     while(1){
         vTaskDelay(pdMS_TO_TICKS(1000));
         touch_pad_read_raw_data(TOUCH_PAD_NUM4, &curVals);
-        ESP_LOGI(TAG, "Slider read raw data, pad4: %"PRIu32,curVals);
-        touch_pad_read_raw_data(TOUCH_PAD_NUM5, &curVals);
-        ESP_LOGI(TAG, "Slider read raw data, pad5: %"PRIu32,curVals);
-        touch_pad_read_raw_data(TOUCH_PAD_NUM6, &curVals);
-        ESP_LOGI(TAG, "Slider read raw data, pad6: %"PRIu32,curVals);
-        touch_pad_read_raw_data(TOUCH_PAD_NUM7, &curVals);
-        ESP_LOGI(TAG, "Slider read raw data, pad7: %"PRIu32,curVals);
-        touch_pad_read_raw_data(TOUCH_PAD_NUM8, &curVals);
-        ESP_LOGI(TAG, "Slider read raw data, pad8: %"PRIu32,curVals);
-        touch_pad_read_raw_data(TOUCH_PAD_NUM9, &curVals);
-        ESP_LOGI(TAG, "Slider read raw data, pad9: %"PRIu32,curVals);
-        touch_pad_read_raw_data(TOUCH_PAD_NUM10, &curVals);
-        ESP_LOGI(TAG, "Slider read raw data, pad10: %"PRIu32,curVals);
+        ESP_LOGI(TAG, "Slider read raw data, pad4: /*%"PRIu32"*/",curVals);
+        // touch_pad_read_raw_data(TOUCH_PAD_NUM5, &curVals);
+        // ESP_LOGI(TAG, "Slider read raw data, pad5: %"PRIu32,curVals);
+        // touch_pad_read_raw_data(TOUCH_PAD_NUM6, &curVals);
+        // ESP_LOGI(TAG, "Slider read raw data, pad6: %"PRIu32,curVals);
+        // touch_pad_read_raw_data(TOUCH_PAD_NUM7, &curVals);
+        // ESP_LOGI(TAG, "Slider read raw data, pad7: %"PRIu32,curVals);
+        // touch_pad_read_raw_data(TOUCH_PAD_NUM8, &curVals);
+        // ESP_LOGI(TAG, "Slider read raw data, pad8: %"PRIu32,curVals);
+        // touch_pad_read_raw_data(TOUCH_PAD_NUM9, &curVals);
+        // ESP_LOGI(TAG, "Slider read raw data, pad9: %"PRIu32,curVals);
+        // touch_pad_read_raw_data(TOUCH_PAD_NUM10, &curVals);
+        // ESP_LOGI(TAG, "Slider read raw data, pad10: %"PRIu32,curVals);
     }
 }
 
-#if 1
+#if 0
 
 /* Slider event handler task */
 static void slider_handler_task(void *arg)
@@ -125,7 +125,7 @@ void touch_slider_init(void)
     ESP_ERROR_CHECK(touch_slider_create(&slider_config, &slider_handle));
     /* Subscribe touch slider events (On Press, On Release, On Calculation) */
     ESP_ERROR_CHECK(touch_slider_subscribe_event(slider_handle, TOUCH_ELEM_EVENT_ON_PRESS | TOUCH_ELEM_EVENT_ON_RELEASE | TOUCH_ELEM_EVENT_ON_CALCULATION, NULL));
-#if 1
+#if 0
     /* Set EVENT as the dispatch method */
     ESP_ERROR_CHECK(touch_slider_set_dispatch_method(slider_handle, TOUCH_ELEM_DISP_EVENT));
     /* Create a handler task to handle event messages */
